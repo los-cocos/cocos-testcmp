@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Comparison report</title>
+</head>
+<style>
+body {
+  margin: 20px;
+}
+
+tbody td {
+  text-align: center;
+}
+
+td, th {
+  padding: 10px 20px;
+}
+</style>
+<body>
+<header>
+    <h1>Comparison @cmp.ordinal</h1>
+</header>
+
+<h2>Asked comparison between</h2>
+<table>
+  <tr>
+    <th></th>
+    <th>v_ref_asked</th>
+    <th>v_other_asked</th>
+  </tr>
+  <tr><td>py</td><td>@cmp.v_ref.asked_py</td><td>@cmp.v_other.asked_py</td></tr>
+  <tr><td>pyglet</td><td>@cmp.v_ref.asked_pyglet</td><td>@cmp.v_other.asked_pyglet</td></tr>
+  <tr><td>cocos</td><td>@cmp.v_ref.asked_cocos</td><td>@cmp.v_other.asked_cocos</td></tr>
+  </tr>
+</table>
+
+<h2>Resolved to comparison between</h2>
+<table>
+  <tr>
+    <th></th>
+    <th>v_ref_resolved</th>
+    <th>v_other_resolved</th>
+  </tr>
+  <tr>
+  <tr><td>py</td><td>@cmp.v_ref.resolved_py</td><td>@cmp.v_other.resolved_py</td></tr>
+  <tr><td>pyglet</td><td>@cmp.v_ref.resolved_pyglet</td><td>@cmp.v_other.resolved_pyglet</td></tr>
+  <tr><td>cocos</td><td>@cmp.v_ref.resolved_cocos</td><td>@cmp.v_other.resolved_cocos</td></tr>
+  </tr>
+</table>
+
+<h2>Cached status</h2>
+Comparison: @cmp.cached<br>
+v_ref_asked: @cmp.v_ref.cached<br>
+v_other_asked: @cmp.v_other.cached<br>
+
+<h2>Stats individual runs</h2>
+<table>
+  <tr>
+    <th></th>
+    <th>v_ref_resolved</th>
+    <th>v_other_resolved</th>
+  </tr>
+  <tr><td>total tests</td><td>@cmp.v_ref.stats_total_tests</td><td>@cmp.v_other.stats_total_tests</td></tr>
+  <tr><td>tests without testinfo</td><td>@cmp.v_ref.stats_no_testinfo</td><td>@cmp.v_other.stats_no_testinfo</td></tr>
+  <tr><td>repeteables</td><td>@cmp.v_ref.stats_repeteables</td><td>@cmp.v_other.stats_repeteables</td></tr>
+  <tr><td>tracebacks</td><td>@cmp.v_ref.stats_failures</td><td>@cmp.v_other.stats_failures</td></tr>
+  <tr><td>black snapshoots</td><td>@cmp.v_ref.stats_blacks</td><td>@cmp.v_other.stats_blacks</td></tr>
+  <tr>
+    <td>details</td>
+	<td><a href="@cmp.v_ref.report_link">link</a></td>
+    <td><a href="@cmp.v_other.report_link">link</a></td>
+  </tr>
+</table>
+
+<h2>Comparison results</h2>
+<p>For tests that took all expected snapshots a comparison between both anapshots version is done.
+</p>
+
+@section_cmp_snp_diff
+
+</body>
