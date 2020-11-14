@@ -1,8 +1,26 @@
 # -*- coding: utf-8 -*-
 """
-- Como en ensure_activated_venv desactivamos el current venv firia que por seguridad
-do_test no deberia correr desde un venv
+If no subcommand provided it completes a comparison between two cocos versions,
+adds the data collected to reports and db.
+
+Subcommands allows to discard or dump some of the generated info.
+
+Usage
+  python do_test.py [subcommand]
+
+Subcommands:
+  <no subcommand>: takes snapshots over test/, runs pytest over utest/,
+      makes a comparison report, adds info to cache and db
+      
+  --del-last-cmp: deletes last cmp data, but not SnapshotSession(s) generated
+  
+  --del-all-cmp: deletes all comparison data, but not the related snapshot info
+
+  --dump-cache: dumps cache
+
+  -h or --help: shows this text
 """
+
 from __future__ import division, print_function, unicode_literals
 import six
 
@@ -17,6 +35,7 @@ import traceback as tb
 import support.fs as fs
 import support.helpers as hl
 import support.templates as templates
+import support.pytest_helper as pt
 
 import conf as tc
 
@@ -188,6 +207,22 @@ def package_dir_in_venv(py_cmd_venv, import_name):
         diagnostic =  msg % " ".join(cmdline)
     return diagnostic, out
 
+def pytest_from_venv(py_cmd_venv, cwd, timeout=60):
+    cmd_pytest = os.path.join(os.path.dirname(py_cmd_venv[0]), "pytest")
+    cmdline = [cmd_pytest, "--cache-clear"]
+    killed, returncode, err, out = cm.cmd_run(cmdline, cwd=cwd, timeout=timeout)
+    cmdstr = " ".join(cmdline)
+    #parts = ["Error while running cmd\n", "    " + cmdstr, "details:"]
+    parts = []
+    parts.append("cwd: %s" % cwd)
+    parts.append("timeout: %s" % killed)
+    parts.append("retcode: %s" % returncode)
+    parts.append("stderr: %s" % err)
+    parts.append("stdout: %s" % out)
+    parts.append("------------------\n")
+    text = "\n".join(parts)
+    return text
+
 ComboVersion = namedtuple("ComboVersion", "py pyglet cocos")
 
 def ensureSnapshotSession(path_services, db, combo_version_asked):
@@ -223,7 +258,7 @@ def ensureSnapshotSession(path_services, db, combo_version_asked):
             return diagnostic, None
 
         hl.new_testbed(db, snp_session.id_string, path_services.test)
-        snapshots_dir = path_services.snp_versioned(snp_session.id_string)
+        snapshots_dir = path_services.snp_versioned(snp_session.id_string)        
         #(db, db_path, snapshots_dir, tests_dir, py_cmd=None)
         diagnostic = take_snapshots(db, path_services.db, snapshots_dir,
                                     path_services.test, py_cmd=snp_session.py_cmd_venv)
@@ -235,8 +270,14 @@ def ensureSnapshotSession(path_services, db, combo_version_asked):
             f.write(as_bytes)
         
         black_snapshots = hl.get_full_black_pngs(snapshots_dir)
-        snp_session.set_stats(db, len(black_snapshots), rpt_fname)
-        
+
+        cwd = path_services.cocos_utest
+        #print("snp_session.py_cmd_venv:", snp_session.py_cmd_venv);sys.exit(1)
+        pytest_link = path_services.pytest_link(snp_session.id_string)
+        pytest_summary = run_unittests(snp_session.py_cmd_venv, cwd, pytest_link, timeout=60)
+
+        snp_session.set_stats(db, len(black_snapshots), rpt_fname, pytest_summary, pytest_link)
+
         if diagnostic == "":
             cache[c_key] = snp_session
             save_cache()
@@ -298,6 +339,30 @@ def take_snapshots(db, db_path, snapshots_dir, tests_dir, py_cmd=None):
     diagnostics = "\n".join(diags)
     return diagnostics
 
+def run_unittests(py_cmd_venv, cwd, logfname, timeout=60):
+    """
+    Will run the pytest found in the Scripts/ of the same venv as py_cmd_venv
+    Writes the pytest output to file logfname, echoes to console, returns a
+    summary
+    
+    Some utest/ tests need the cwd to be utest/
+    
+    cocos older than 0.6.10 needs patching so that no env var needs to be set,
+    the patching is done at method SnapshotSession.install_pyglet_cocos
+
+    Modern cocos version that do not need that patching signal it by having a
+    file utest/pytest_nolegacy.txt
+    """
+    text = pytest_from_venv(py_cmd_venv, cwd, timeout)
+    # using 'tee' would be better, but not available on Windows cmd.exe console
+    # still, with execution time < 2 sec is aceptable for cocos-testcmp
+    print(text)
+    as_bytes = text.encode("utf8")
+    with open(logfname, "wb") as f:
+        f.write(as_bytes)
+    s = pt.get_summary_line(text)
+    return s
+
 class SnapshotSession(object):
     def __init__(self, combo_version_asked):
         self.asked_py = combo_version_asked[0]
@@ -347,7 +412,7 @@ class SnapshotSession(object):
         return diagnostic
 
     #? agregar stat num scripts sacaron todas las fotos esperadas
-    def set_stats(self, db, num_blacks, report_link):
+    def set_stats(self, db, num_blacks, report_link, pytest_summary, pytest_link):
         self.stats_total_tests = db.num_entities()
         no_testinfo, _ = hl.get_scripts(db, "testinfo_missing")
         self.stats_no_testinfo = len(no_testinfo)
@@ -357,6 +422,9 @@ class SnapshotSession(object):
 
         self.stats_blacks = num_blacks
         self.report_link = report_link
+
+        self.pytest_summary = pytest_summary
+        self.pytest_link = pytest_link
         
     def ensure_venv(self, path_services):
         # ensure env exists
@@ -457,7 +525,9 @@ class SnapshotSession(object):
         if tc.custom_clocks_checkout_str is not None:
             path = path_services.cocos_custom_clocks
             gits.checkout_file(path_services.cocos, tc.custom_clocks_checkout_str, path)
-
+        # patch cocos/utest for old cocos versions
+        pt.patch_if_needed(path_services)
+        
         # install cocos
         msg = "installing cocos2d in the venv"
         print(msg)
@@ -715,6 +785,9 @@ def main(task, extra):
     elif task == "del_snp":
         pass
 
+    elif task == "usage":
+        usage()
+
 def cache_str():
     global logg, cache, cache_path
     lines = ["Cache contents"]
@@ -728,6 +801,10 @@ def cache_str():
         lines.append("%s %s" % (k, cache[k]))
     text = "\n".join(lines)
     return text
+
+def usage():
+    text = __doc__.replace("do_test.py", os.path.basename(__file__))
+    print(text)
     
 if __name__ == "__main__":
     task = "usage"
@@ -746,4 +823,3 @@ if __name__ == "__main__":
             task = "del_snp"
             extra = sys.argv[2]
     main(task, extra)
-

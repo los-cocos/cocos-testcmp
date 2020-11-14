@@ -20,7 +20,7 @@ pyglet.resource.reindex()
 
 
 try:
-    unittesting = os.environ['cocos_utest']
+    unittesting = hasattr(pyglet, 'mock_level')
 except KeyError:
     unittesting = False
 del os, pyglet

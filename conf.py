@@ -41,20 +41,20 @@ pyversions_available = {
     "2.7": "/usr/bin/python2.7",
     }
 
-#pyglet 1.5 dev 2020 11 02, cocos 0.6.9 
-v_ref = ("3.7", "8795852f", "release-0.6.9")
+#pyglet 1.5.9, cocos 0.6.9
+v_ref = ("3.7", "33175228", "release-0.6.9")
 
-#pyglet 1.4.11 (last released 1.4.x), cocos 0.6.8
-v_other = ("3.7", "0af100f4", "release-0.6.8")
-# informative, snapshots taken:
+#pyglet 1.4.11 release, cocos 0.6.7 release 
+v_other = ("3.7", "0af100f4", "release-0.6.7")
 
+# informative
 
 
 ### notable pyglet _git_ commits
 friendly_pyglet = {
     # abrev. sha: friendly name
-    "8795852f": "1.5 maintenance master, 2020 11 02",
-    "a39ebc20": "1.5.8 2020 10 16 (ATM last 1.5.x released)",
+    "33175228": "1.5.9 2020 11 09 (ATM last 1.5.x released)",
+    "a39ebc20": "1.5.8 2020 10 16",
     "b9c9ffae": "1.5.7 2020 06 21",
     "ce8b3073": "1.5.6 2020 06 12",
     "4f2e2d6c": "1.5.5 2020 05 02",
@@ -74,7 +74,6 @@ friendly_pyglet = {
 
 friendly_cocos = {
     "90b9350": "0.6.9 2020 11 08",
-    '8367d96': "pre 0.6.9, 'more fix tiles for py 3.9+ xml changes'", 
     'cab0b8a': "0.6.8 2020 02 02",
     '32af346': "0.6.7 2019 09 06 (1st cocos version to support pyglet 1.4.x, needs 1.4.3+)",
     'd90978d': "0.6.6 2019 08 15",

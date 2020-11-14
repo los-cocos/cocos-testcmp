@@ -26,8 +26,11 @@ class PathServices(object):
         self.cocos = os.path.join(self.work, "cocos")
         self.cocos_setup = os.path.join(self.cocos, "setup.py")
         self.cocos_init = os.path.join(self.cocos, "cocos", "__init__.py")
+        self.cocos_director = os.path.join(self.cocos, "cocos", "director.py")
         self.cocos_custom_clocks = os.path.join(self.cocos, "cocos", "custom_clocks.py")
         self.cocos_test = os.path.join(self.cocos, "test")
+        self.cocos_utest = os.path.join(self.cocos, "utest")
+        self.pytest_nolegacy = os.path.join(self.cocos_utest, "pytest_nolegacy.txt")
         self.cache = os.path.join(self.work, "cache.pkl")
         self.db = os.path.join(self.work, "db.pkl")
         self.cmp = os.path.join(self.work, "cmp")
@@ -51,6 +54,10 @@ class PathServices(object):
 
     def report_link(self, version_string):
         short = "_rpt_%s.txt" % version_string
+        return os.path.join(self.snp_versioned(version_string), short)
+
+    def pytest_link(self, version_string):
+        short = "_rpt_pytest_%s.txt" % version_string
         return os.path.join(self.snp_versioned(version_string), short)
 
     def cmp_report(self, ordinal):

@@ -68,11 +68,19 @@ v_other_asked: @cmp.v_other.cached<br>
   <tr><td>tracebacks</td><td>@cmp.v_ref.stats_failures</td><td>@cmp.v_other.stats_failures</td></tr>
   <tr><td>black snapshoots</td><td>@cmp.v_ref.stats_blacks</td><td>@cmp.v_other.stats_blacks</td></tr>
   <tr>
-    <td>details</td>
+    <td>details take snapshots</td>
 	<td><a href="@cmp.v_ref.report_link">link</a></td>
     <td><a href="@cmp.v_other.report_link">link</a></td>
   </tr>
+  <tr>
+    <td>details pytest</td>
+	<td><a href="@cmp.v_ref.pytest_link">link</a></td>
+    <td><a href="@cmp.v_other.pytest_link">link</a></td>
+  </tr>
 </table>
+
+<p><b>v_ref pytest summary:</b> @cmp.v_ref.pytest_summary</p>
+<p><b>v_other pytest summary:</b> @cmp.v_other.pytest_summary</p>
 
 <h2>Comparison results</h2>
 <p>For tests that took all expected snapshots a comparison between both anapshots version is done.
@@ -81,3 +89,4 @@ v_other_asked: @cmp.v_other.cached<br>
 @section_cmp_snp_diff
 
 </body>
+</html>

@@ -26,6 +26,8 @@ cmp.v_other.asked_cocos
 cmp.v_other.asked_py
 cmp.v_other.asked_pyglet
 cmp.v_other.cached
+cmp.v_other.pytest_link
+cmp.v_other.pytest_summary
 cmp.v_other.report_link
 cmp.v_other.resolved_cocos
 cmp.v_other.resolved_py
@@ -39,6 +41,8 @@ cmp.v_ref.asked_cocos
 cmp.v_ref.asked_py
 cmp.v_ref.asked_pyglet
 cmp.v_ref.cached
+cmp.v_ref.pytest_link
+cmp.v_ref.pytest_summary
 cmp.v_ref.report_link
 cmp.v_ref.resolved_cocos
 cmp.v_ref.resolved_py
@@ -48,8 +52,7 @@ cmp.v_ref.stats_failures
 cmp.v_ref.stats_no_testinfo
 cmp.v_ref.stats_repeteables
 cmp.v_ref.stats_total_tests
-section_cmp_snp_diff
-"""
+section_cmp_snp_diff"""
 
 known_symbols = listing_known_symbols.strip().split("\n")
 
