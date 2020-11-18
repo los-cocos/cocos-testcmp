@@ -170,7 +170,7 @@ def pip_install_in_venv(py_cmd_venv, pip_name, logfname):
     return diagnostic
 
 def pip_uninstall_in_venv(py_cmd_venv, pip_name):
-    cmdline = py_cmd_venv + ["-m", "pip", "uninstall", pip_name]
+    cmdline = py_cmd_venv + ["-m", "pip", "uninstall", "-y", pip_name]
 #    ["python", "-m", "pip", "uninstall", pip_name]
     try:
         out = cm.cmd_run_ok(cmdline)
