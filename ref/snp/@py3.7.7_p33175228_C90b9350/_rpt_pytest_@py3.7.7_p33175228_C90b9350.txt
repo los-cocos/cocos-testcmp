@@ -1,0 +1,49 @@
+cwd: D:\dev\cocos-testcmp\work\cocos\utest
+timeout: False
+retcode: 0
+stderr: 
+stdout: ============================= test session starts =============================
+platform win32 -- Python 3.7.7, pytest-6.1.2, py-1.9.0, pluggy-0.13.1
+rootdir: D:\dev\cocos-testcmp\work\cocos
+collected 558 items
+
+test_RectMapCollider__no_stuck.py ...................................... [  6%]
+........................................................................ [ 19%]
+........................................................................ [ 32%]
+........................................................................ [ 45%]
+..........................                                               [ 50%]
+test_acceldeccel.py .                                                    [ 50%]
+test_actions.py .                                                        [ 50%]
+test_collision_model.py ......                                           [ 51%]
+test_collision_model_aarect.py ......                                    [ 52%]
+test_collision_model_aarect_circle.py ......                             [ 53%]
+test_collision_model_details.py ..                                       [ 54%]
+test_director_scene_changes.py ...........                               [ 56%]
+test_euclid.py ......................................                    [ 62%]
+test_instant_actions.py .                                                [ 63%]
+test_p_ba_Loop_Actions.py ...                                            [ 63%]
+test_p_ba_Loop_IntervalAction.py ...                                     [ 64%]
+test_p_ba_Repeat_Action.py ....                                          [ 64%]
+test_p_ba_Sequence_Action.py .........                                   [ 66%]
+test_p_ba_Sequence_IntervalAction.py ................................... [ 72%]
+.....                                                                    [ 73%]
+test_p_ba_Spawn_Action.py ..........                                     [ 75%]
+test_p_ba_Spawn_IntervalAction.py ...................................... [ 82%]
+................                                                         [ 85%]
+test_p_ba_cocosnode_actions.py ......                                    [ 86%]
+test_p_ba_operands_different_classes.py .                                [ 86%]
+test_p_ba_operators_result_type.py ..................                    [ 89%]
+test_rect.py ...                                                         [ 90%]
+test_tiles.py ...........                                                [ 92%]
+test_tmx.py ....................................                         [ 98%]
+test_uniform_snippet.py ........                                         [100%]
+
+============================== warnings summary ===============================
+utest/test_tmx.py::Test_tmx_get_properties::test_unknown_type
+  D:\dev\cocos-testcmp\work\cocos\utest\..\cocos\tiles.py:343: TmxPropertyTypeUnknownWarning: property 'the_name' has unknown type 'foo'
+    warnings.warn(TmxPropertyTypeUnknownWarning(msg))
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+======================= 558 passed, 1 warning in 1.25s ========================
+
+------------------

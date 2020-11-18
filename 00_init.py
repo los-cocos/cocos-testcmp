@@ -32,16 +32,18 @@ def install_remembercases(python_venv_cmdline, path_remembercases, checkout_str)
         print("   ", " ".join(cmd_parts))  
         sys.exit(1)
     
-        
+
+
 base_dir = os.path.dirname(os.path.abspath(__file__))
 path_services = fs.PathServices(base_dir)
+
 if os.path.exists(path_services.work):
     print("\n Error, there exista a 'work' directory. Delete it to start clean")
     sys.exit(1)
 
-print("\nCreate wotk/ subtree")
-os.mkdir(path_services.work)
-os.mkdir(path_services.snp)
+print("\nCreating work/ and setting reference snapshots")
+shutil.copytree(path_services.ref, path_services.work)
+#os.mkdir(path_services.snp) # no, just created the line above
 os.mkdir(path_services.pys)
 os.mkdir(path_services.cmp)
 
@@ -65,5 +67,6 @@ print("\nCloning remembercases")
 clone_lib("remembercases", te.remembercases_URL, path_services.remembercases)
 
 install_remembercases(te.main_venv_python, path_services.remembercases, te.remembercases_checkout_str)
+
 
 print("*** initialization done ***")

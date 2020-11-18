@@ -18,6 +18,8 @@ Subcommands:
 
   --dump-cache: dumps cache
 
+  --make-@snapshot: makes special reference snapshot, needs clean workspace
+
   -h or --help: shows this text
 """
 
@@ -71,6 +73,8 @@ def load_pickle(fname):
 
 def get_python_cmdline(asked_py):
     diagnostic = ""
+    if asked_py.startswith("@"):
+        asked_py = asked_py[1:]
     if sys.platform == "win32":
         cmd_python = ["py", "-%s" % asked_py]
         print("cmd_python:", cmd_python)
@@ -225,14 +229,29 @@ def pytest_from_venv(py_cmd_venv, cwd, timeout=60):
 
 ComboVersion = namedtuple("ComboVersion", "py pyglet cocos")
 
-def ensureSnapshotSession(path_services, db, combo_version_asked):
+def ensureSnapshotSession(path_services, db, combo_version_asked, make_reference=False):
     logg.out("info: ensureSnapshotSession starts - version asked:", combo_version_asked, flush=True)
+    if not make_reference and combo_version_asked[0].startswith("@"):
+        # session to compare the reference session to other
+        # the special reference session included with cocos-testcmp
+        for k in cache:
+            if isinstance(k, tuple) and k[0]=="snprun" and k[1].startswith("@"):
+                snp_session = copy.copy(cache[k])
+                snp_session.cached = True
+                diagnostic = ""
+                msg = "info: ensureSnapshotSession - resolve: special @ reference snapshot"
+                logg.out(msg, flush=True)
+                return diagnostic, snp_session
+        diagnostic = "No special @ reference snapshot found in cache"
+        logg.out("error: " + diagnostic, flush=True)
+        raise KeyError(diagnostic)
+
     snp_session = SnapshotSession(combo_version_asked)
     diagnostic = snp_session.resolve(path_services)
     if diagnostic != "":
         return diagnostic, None
     logg.out("info: ensureSnapshotSession - resolve:", snp_session.resolved_py, snp_session.resolved_pyglet, snp_session.resolved_cocos, flush=True)
-    c_key = snp_session.cache_key()
+    c_key = snp_session.cache_key(make_reference)
     if c_key in cache:
         logg.out("info: ensureSnapshotSession - session in cache", flush=True)
         session = copy.copy(cache[c_key])
@@ -353,6 +372,7 @@ def run_unittests(py_cmd_venv, cwd, logfname, timeout=60):
     Modern cocos version that do not need that patching signal it by having a
     file utest/pytest_nolegacy.txt
     """
+    logg.out("info: start pytest run")
     text = pytest_from_venv(py_cmd_venv, cwd, timeout)
     # using 'tee' would be better, but not available on Windows cmd.exe console
     # still, with execution time < 2 sec is aceptable for cocos-testcmp
@@ -370,8 +390,10 @@ class SnapshotSession(object):
         self.asked_cocos = combo_version_asked[2]
         self.cached = False
 
-    def cache_key(self):
-        return ("snprun", self.resolved_py, self.resolved_pyglet, self.resolved_cocos)
+    def cache_key(self, make_reference=False):
+        mark = "@" if make_reference else ""
+        resolved_py = mark + self.resolved_py
+        return ("snprun", resolved_py, self.resolved_pyglet, self.resolved_cocos)
 
     def __str__(self):
         fmt = "asked: %s, %s, %s - resolved: %s %s %s"
@@ -405,10 +427,10 @@ class SnapshotSession(object):
                     "(path to cocos WD was '%s')\n")
             diagnostic += msg % (self.asked_cocos, path_services.cocos)
         if diagnostic == "":
-            fmt = "py%s_p%s_C%s"
-            self.id_string = fmt % (self.resolved_py, self.resolved_pyglet,
-                                    self.resolved_cocos)
-
+            mark = "@" if self.asked_py.startswith("@") else ""
+            fmt = "%spy%s_p%s_C%s"
+            self.id_string = fmt % (mark, self.resolved_py, self.resolved_pyglet,
+                                self.resolved_cocos)
         return diagnostic
 
     #? agregar stat num scripts sacaron todas las fotos esperadas
@@ -721,6 +743,32 @@ def compare(path_services):
     if diagnostic == "":
         rpt_cmp(path_services, cmp)
 
+def make_reference_snapshot(path_services):
+    global logg, cache, cache_path
+    if not tc.v_ref[0].startswith("@"):
+        msg = "error: asked to meke reference snapshot but v_ref have no '@'"
+        logg.out(msg)
+        print(msg)
+        return
+    if os.path.exists(path_services.cache) or os.path.exists(path_services.db):
+        msg = "error: asked to meke reference snapshot but directory work is dirty"
+        logg.out(msg)
+        print(msg)
+        return        
+    logg.out("info: building special @ reference snapshot")
+    make_reference = True
+    db = hl.ensure_db(path_services.db)
+    logg.out("info: db initial load - testbeds:", "%s" % db.db.keys())
+    diagnostic, _ = ensureSnapshotSession(path_services, db, tc.v_ref,
+                                                    make_reference)
+    if diagnostic == "":
+        msg = "info: make_reference_snapshot success"
+    else:
+        fmt = "error: make_reference_snapshot ended with diagnostic:\n%s"
+        msg = fmt % diagnostic
+    logg.out(msg)
+    print(msg)
+
 def main(task, extra):
     global logg, cache, cache_path
     base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -730,6 +778,7 @@ def main(task, extra):
     ##  - with key "cmp_ord": ordinal next comparison
     ##  - with key ("cmp", v_ref_resolved, v_other_resolved): Cmp instamce
     ##  - with key ("snprun", combo_version_resolved) -> instance SnapshotSession
+    ##  - a variant on snaprun is the rederence snapshot has an "@" prepended to py version
     logg.out("Session starts -----------------------------------------------------")
     cache = {"cmp_ord": 0}
     cache_path = path_services.cache
@@ -779,6 +828,9 @@ def main(task, extra):
     elif task == "compare":
         compare(path_services)
 
+    elif task == "make_reference_snapshot":
+        make_reference_snapshot(path_services)
+
     elif task == "dump_cache":
         print(cache_str())
 
@@ -818,6 +870,8 @@ if __name__ == "__main__":
             task = "del_all_cmp"
         elif sys.argv[1] == "--dump-cache":
             task = "dump_cache"
+        elif sys.argv[1] == "--make-@snapshot":
+            task = "make_reference_snapshot"
     elif len(sys.argv) == 3:
         if sys.argv[1] == "--del-snp":
             task = "del_snp"

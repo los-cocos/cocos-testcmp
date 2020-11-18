@@ -16,6 +16,7 @@ class PathServices(object):
     def __init__(self, base_path):
         self.base = base_path
         self.support = os.path.join(self.base, "support")
+        self.ref = os.path.join(self.base, "ref")
         self.work = os.path.join(self.base, "work")
         self.log = os.path.join(self.work, "do_test.log")
         self.pys = os.path.join(self.work, "pys")

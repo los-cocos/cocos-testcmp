@@ -22,3 +22,5 @@ makefile text
 *.mp3 binary
 *.gif binary
 *.wav binary
+
+*.pkl binary

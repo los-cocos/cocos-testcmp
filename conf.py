@@ -4,7 +4,7 @@ from __future__ import division, print_function, unicode_literals
 ### -> This section must be configured before the 00_init.py run
 
 remembercases_URL = "git@gitlab.com:ccanepa/remembercases.git"
-remembercases_checkout_str = "gits" #"master" #"v0.4.0"
+remembercases_checkout_str = "master" #"v0.4.0" # "branch_name"
 pyglet_URL = "https://github.com/pyglet/pyglet.git"
 cocos_URL  = "git@github.com:los-cocos/cocos.git"
 
@@ -29,6 +29,7 @@ packages = {
     "six": "six",
     "numpy": "numpy",
     "PIL": "pillow<8", # '<8' needed for pyglet <1.5.9; py39's pillow wants 8+ in windows
+    "pytest": "pytest", 
     }
 
 # pythons needed to create venv s for testing
@@ -41,11 +42,11 @@ pyversions_available = {
     "2.7": "/usr/bin/python2.7",
     }
 
-#pyglet 1.5.9, cocos 0.6.9
-v_ref = ("3.7", "33175228", "release-0.6.9")
+#pyglet 1.5.10, cocos 0.6.9
+v_ref = ("@3.7", "v1.5.9", "release-0.6.9")
 
-#pyglet 1.4.11 release, cocos 0.6.7 release 
-v_other = ("3.7", "0af100f4", "release-0.6.7")
+#pyglet 1.5.10, cocos 0.6.9
+v_other = ("3.7", "v1.5.9", "release-0.6.9")
 
 # informative
 
@@ -53,7 +54,8 @@ v_other = ("3.7", "0af100f4", "release-0.6.7")
 ### notable pyglet _git_ commits
 friendly_pyglet = {
     # abrev. sha: friendly name
-    "33175228": "1.5.9 2020 11 09 (ATM last 1.5.x released)",
+    "3536341e": "v1.5.10 2020 11 15 (ATM last 1.5.x released)",
+    "33175228": "1.5.9 2020 11 09",
     "a39ebc20": "1.5.8 2020 10 16",
     "b9c9ffae": "1.5.7 2020 06 21",
     "ce8b3073": "1.5.6 2020 06 12",

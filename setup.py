@@ -1,19 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-   example operation for generating release without handling the docs:
-       git clone https://github.com/los-cocos/cocos.git cocos_trunk
-       cd cocos_trunk
-       py -3.7 setup.py sdist >../sdist.log
-       [ the generated package will be in cocos_trunk/dist ]
-
-       Look at tools/building_release_notes.txt for more info about building
-       release.
 """
 
 __author__ = "cocos2d team"
 __author_email__ = "lucio.torre@gmail.com"
-__version__ = "0.6.8"
-__date__ = "2020 02 02"
+__version__ = "0.6.9"
+__date__ = "2020 11 18"
 
 try:
     import setuptools
