@@ -95,7 +95,7 @@ The file cocos-testcmp/conf.py is the one to edit.
    
   More pythons can be added anytime later, it is best to provide and configure in advance to have less things to worry when running the tests.
    
-- Adjust repo URLs if using forks or other git protocol, casual users can left as it comes.
+- Adjust repo URLs if using forks or other git protocol.
   Repos to configure are for packages 'remembercases', 'cocos2d', 'pyglet'
   Example for remembercases::
 
@@ -127,9 +127,12 @@ Test loop
 - Edit conf.py and set v_ref and v_other to tell which combination of (python, pyglet, cocos) will be used
 
 - Run comparison with::
+
      python do_test.py
 
   Note that at least in Windows the activated console should have focus when do_test begins to take snapshots, else will produce snapshots of 0 filesize and the comparison will crash with a traceback.
+  
+  Reports are named 00_cmp_report.htm, 01_cmp_report.htm, ... one for each run of do_test and it can be found at work/
 
 - Repeat as necessary
 
@@ -156,3 +159,7 @@ Tips
 ----
 
 - Each do_test run will start by checking out the specified pyglet and cocos commits, so if you edit and don't commit you will lose the changes. Safest is to do changes in a WD outside work/, push from there, pull from work/cocos (and remember to adjust cocos version in conf.py)
+
+- Try to test with AMD or Nvidia GPUs, integrated Intel ones can give tracebacks due to not supporting this or that OpenGL function.
+
+- Remember to check the 'tracebacks' line in the summary, the comparison section will only compare scripts runs with no tracebacks and with all expected snapshots taken.
