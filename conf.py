@@ -1,26 +1,39 @@
 # -*- coding: utf-8 -*-
 from __future__ import division, print_function, unicode_literals
 
-### -> This section must be configured before the 00_init.py run
+### -> This section must be configured before the 00_init.py run (but more
+###    python versions can be added at any time)
 
+# python executable to drive the data collection, the one in the venv
+main_venv_python = ["D:/dev/py37_cmp/Scripts/python.exe",]
+
+# fully qualified python executable to invoke to run a python at version X.Y
+pyversions_available = {
+    #version: cmdline to invoke python, by example "/bin/python3.7"
+    "3.7": "/usr/bin/python3.7",
+    "2.7": "/usr/bin/python2.7",
+    }
+
+# package remembercases, projet page at https://gitlab.com/ccanepa/remembercases
+#remembercases_URL = https://gitlab.com/ccanepa/remembercases.git
 remembercases_URL = "git@gitlab.com:ccanepa/remembercases.git"
-remembercases_checkout_str = "master" #"v0.4.0" # "branch_name"
+remembercases_checkout_str = "master" #"v0.4.1" # "branch_name" #"tag_name"
+
+# package pyglet, project page at https://github.com/pyglet/pyglet
 pyglet_URL = "https://github.com/pyglet/pyglet.git"
+
+# package cocos, project page at https://github.com/los-cocos/cocos
+# cocos_URL  = https://github.com/los-cocos/cocos.git
 cocos_URL  = "git@github.com:los-cocos/cocos.git"
 
 # git checkout string used before copying cocos\test
 test_checkout_str = "master"
 
 # git checkout string for the commit where cocos\custom_clocks.py be taken,
-# None for 'use original custom_clocks 
+# None for 'use original custom_clocks'
 custom_clocks_checkout_str = None #"master"
 
-main_venv_python = ["D:/dev/py37_cmp/Scripts/python.exe",]
-#main_venv_python = ["D:/cla/dev2/py39_cmp/Scripts/python.exe",]
-
-### <- This section must be configured before the 00_init.py run
-
-# packages installed by pip from pypi
+# packages to install with pip from pypi in each venv to test
 packages = {
     # import_name: pip_name
     # examples
@@ -32,15 +45,16 @@ packages = {
     "pytest": "pytest", 
     }
 
-# pythons needed to create venv s for testing
-# used in unix-like OS, must be adjudsted to the testing machine.
-# here a setting to work in the raspi3 with raspbian buster
-# in windows the mapping "X.Y" -> "py -X.Y" is assumed 
-pyversions_available = {
-    #version: cmdline to invoke python, by example "/bin/python3.7"
-    "3.7": "/usr/bin/python3.7",
-    "2.7": "/usr/bin/python2.7",
-    }
+### <- This section must be configured before the 00_init.py run
+    
+
+### -> Configure this for each comparison run desired
+
+# The tuples specify (python version, pyglet version, cocos version)
+# pyglet and cocos versions are specified as a string to do a
+# 'git checkout string'; branch names, tag names and commit hashes are fine.
+# Prepending an '@' to the py version will select the special reference session
+# provided with cocos-testcmp, all other info will be ignored
 
 #pyglet 1.5.10, cocos 0.6.9
 v_ref = ("@3.7", "v1.5.9", "release-0.6.9")
@@ -48,12 +62,12 @@ v_ref = ("@3.7", "v1.5.9", "release-0.6.9")
 #pyglet 1.5.10, cocos 0.6.9
 v_other = ("3.7", "v1.5.9", "release-0.6.9")
 
-# informative
+### <- Configure this for each comparison run desired
 
 
-### notable pyglet _git_ commits
+### --> Only for reference, not used in cocos-testcmp
 friendly_pyglet = {
-    # abrev. sha: friendly name
+    # abrev. hash: friendly name
     "3536341e": "v1.5.10 2020 11 15 (ATM last 1.5.x released)",
     "33175228": "1.5.9 2020 11 09",
     "a39ebc20": "1.5.8 2020 10 16",
@@ -89,31 +103,3 @@ friendly_cocos = {
     '20e2bed': "0.4.0 2010 09 27 (needs pyglet 1.1.4+)",
     '10ffb10': "0.3.0 2008 09 05 (needs pyglet 1.1b2+)",
     }
-
-# In raspi3 with raspbian buster
-
-# To know the python version
-    # $ python2 --version
-    # Python 2.7.16
-
-    # $ python3 --version
-    # Python 3.7.3
-
-# To know from where they come
-  # py2
-    # pi@raspberrypi:~/dev2 $ ls -l /usr/bin/python
-    # lrwxrwxrwx 1 root root 7 Mar  4  2019 /usr/bin/python -> python2
-    # pi@raspberrypi:~/dev2 $ ls -l /usr/bin/python2
-    # lrwxrwxrwx 1 root root 9 Mar  4  2019 /usr/bin/python2 -> python2.7
-    # pi@raspberrypi:~/dev2 $ ls -l /usr/bin/python2.7
-    # -rwxr-xr-x 1 root root 2984816 Oct 10  2019 /usr/bin/python2.7
-
-  # py3
-    # pi@raspberrypi:~/dev2 $ ls -l /usr/bin/python3
-    # lrwxrwxrwx 1 root root 9 Mar 26  2019 /usr/bin/python3 -> python3.7
-    # pi@raspberrypi:~/dev2 $ ls -l /usr/bin/python3.7
-    # -rwxr-xr-x 2 root root 4275580 Jul 25 10:03 /usr/bin/python3.7
-
-# references about softlinks and hardlinks
-# http://www.penguintutor.com/raspberrypi/links-reference-guide
-# https://www.unixtutorial.org/how-to-find-what-symlink-points-to/
