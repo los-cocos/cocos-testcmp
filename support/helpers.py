@@ -177,7 +177,7 @@ def new_testbed(db, testbed, basepath):
     db.history_add("new_testbed", text_history)
 
 def canonical_names_from_filenames(db, filenames):
-    """Convert filenames to the canonical form
+    r"""Convert filenames to the canonical form
 
     :Parameters:
         `db` : remembercases.TestbedEntityPropDB

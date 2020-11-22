@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""cocos\__init__.py with pyglet checks striped"""
+"""cocos/__init__.py with pyglet checks striped"""
 
 from __future__ import division, print_function, unicode_literals
 
