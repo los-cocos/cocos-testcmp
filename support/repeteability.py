@@ -31,7 +31,7 @@ def new(db_fname, testbed, stats_fname, candidates, limit, samples_dir):
     session = db_fname, testbed, samples_dir, res
     with open(stats_fname, 'wb') as f:
         pickle.dump(session, f, 2)
-        
+
 def load_stats(stats_fname):
     with open(stats_fname, 'rb') as f:
         session = pickle.load(f)
@@ -41,7 +41,7 @@ def load_stats(stats_fname):
             overal_md5, elapsed, rounds,
             stats_by_script_name, stats_by_snapshot_name
             )
-            
+
 def more_rounds(stats_fname, limit, debug=False):
     """
     Adds more rounds to the stats pointed by stats_fname
@@ -71,7 +71,7 @@ def more_rounds(stats_fname, limit, debug=False):
      overal_md5_2, elapsed_2, rounds_2,
      stats_by_script_name_2, stats_by_snapshot_name_2
     ) = load_stats(tmp_stats)
-    
+
     # for paranoid debbuging we should check no mismatch in the spec of both
     # runs, like db_fanme == db_fname2, etc but we will spare that
 
@@ -106,8 +106,8 @@ def more_rounds(stats_fname, limit, debug=False):
     # verify
     with open(stats_fname, 'rb') as f:
         session3 = pickle.load(f)
-    assert session3 == session 
-    
+    assert session3 == session
+
 def expand_stats(db, rounds, stats_by_script_name, stats_by_snapshot_name):
 
     agregated_stats_by_snap = {}
@@ -139,7 +139,7 @@ def expand_stats(db, rounds, stats_by_script_name, stats_by_snapshot_name):
             sum( [ agregated_stats_by_snap[sn]['variants'] - 1
                                                for sn in expected_snapshots ]))
 
-    return agregated_stats_by_snap, expaned_stats_by_script_name    
+    return agregated_stats_by_snap, expaned_stats_by_script_name
 
 def rpt_compact(elapsed, rounds, res_expand, verbose=False):
     agregated_stats_by_snap, expaned_stats_by_script_name = res_expand
@@ -198,13 +198,13 @@ def report(stats_fname, rpt_function):
 
 db_fname = 'initial.dat' # must exist as a result of running recon.py
 testbed = 'cpu intel E7400, gpu ati 6570 with Catalyst 11-5 drivers, win xp sp3'
-stats_fname = 'rep_stats.pkl' 
+stats_fname = 'rep_stats.pkl'
 samples_dir = '../../test/saux'
 
 # for real runs set 'candidates=None' and limit according to how much time
 # you can spend in runs.
 # To add more rounds to a stats, set clean=False ; it is fine to have
-# different limit when adding rounds 
+# different limit when adding rounds
 #candidates = ['test/test_accel_amplitude.py', 'test/test_base.py']
 candidates = None # means all tests
 # debug

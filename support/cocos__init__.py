@@ -65,4 +65,3 @@ if not unittesting:
     from cocos import skeleton
     from cocos import rect
     from cocos import tiles
-

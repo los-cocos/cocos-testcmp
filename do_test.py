@@ -11,9 +11,9 @@ Usage
 Subcommands:
   <no subcommand>: takes snapshots over test/, runs pytest over utest/,
       makes a comparison report, adds info to cache and db
-      
+
   --del-last-cmp: deletes last cmp data, but not SnapshotSession(s) generated
-  
+
   --del-all-cmp: deletes all comparison data, but not the related snapshot info
 
   --dump-cache: dumps cache
@@ -57,7 +57,7 @@ def save_cache():
     with open(cache_path, "wb") as f:
         pickler = pickle.Pickler(f, protocol=2)
         pickler.dump(cache)
-    
+
 
 def save_pickle(fname, obj):
     # protocol 2 is compatible with both py2.x and 3.x , protocol 3 is py3 only
@@ -199,7 +199,7 @@ def pip_dev_install_in_venv(py_cmd_venv, path):
 def package_dir_in_venv(py_cmd_venv, import_name):
     prog = ("import os, sys, %s;" +
             "pkgdir = os.path.dirname(os.path.abspath(%s.__file__));" +
-            "sys.stdout(pkgdir") % (import_name, import_name) 
+            "sys.stdout(pkgdir") % (import_name, import_name)
     cmdline = py_cmd_venv + ["-c", prog]
     out = None
     try:
@@ -267,7 +267,7 @@ def ensureSnapshotSession(path_services, db, combo_version_asked, make_reference
         if diagnostic != "":
             logg.out(diagnostic)
             return diagnostic, None
-        
+
         diagnostic = snp_session.ensure_non_dev_packages(path_services, tc.packages)
         if diagnostic != "":
             return diagnostic, None
@@ -277,7 +277,7 @@ def ensureSnapshotSession(path_services, db, combo_version_asked, make_reference
             return diagnostic, None
 
         hl.new_testbed(db, snp_session.id_string, path_services.test)
-        snapshots_dir = path_services.snp_versioned(snp_session.id_string)        
+        snapshots_dir = path_services.snp_versioned(snp_session.id_string)
         #(db, db_path, snapshots_dir, tests_dir, py_cmd=None)
         diagnostic = take_snapshots(db, path_services.db, snapshots_dir,
                                     path_services.test, py_cmd=snp_session.py_cmd_venv)
@@ -287,7 +287,7 @@ def ensureSnapshotSession(path_services, db, combo_version_asked, make_reference
         as_bytes = text.encode("utf8")
         with open(rpt_fname, "wb") as f:
             f.write(as_bytes)
-        
+
         black_snapshots = hl.get_full_black_pngs(snapshots_dir)
 
         cwd = path_services.cocos_utest
@@ -315,7 +315,7 @@ def take_snapshots(db, db_path, snapshots_dir, tests_dir, py_cmd=None):
     The file persisting the db is updated at each step, so more detail on
     bad conditions can be obtained by making the appropiate queries to the
     db without need to rerun slow operations
-    
+
     db: instance of remembercases,db.TestbedEntityPropDB to store data
 
     db_path: full filename to store data colected
@@ -332,10 +332,10 @@ def take_snapshots(db, db_path, snapshots_dir, tests_dir, py_cmd=None):
     known, unknown = hl.get_scripts(db, 'all')
     print("known:", known)
     print("unknown:", unknown)
-    
+
     assert len(known) == 0 and len(unknown) == 0
-    
-    diags = [""] 
+
+    diags = [""]
     # add all scripts test_*.py as entities
     all_test_files = doers.files_from_dir(tests_dir, fn_fname_test_py)
     canonical_names = hl.canonical_names_from_filenames(db, all_test_files)
@@ -351,7 +351,7 @@ def take_snapshots(db, db_path, snapshots_dir, tests_dir, py_cmd=None):
     # filter candidates to retain the ones that can be run
     candidates, unknowns = hl.get_scripts(db, 'testinfo_valid')
     assert len(unknowns)==0
-    
+
     # do snapshots
     valid_scripts, rejected = hl.update_snapshots(db, db_path, candidates,
                                             snapshots_dir, py_cmd=py_cmd)
@@ -363,9 +363,9 @@ def run_unittests(py_cmd_venv, cwd, logfname, timeout=60):
     Will run the pytest found in the Scripts/ of the same venv as py_cmd_venv
     Writes the pytest output to file logfname, echoes to console, returns a
     summary
-    
+
     Some utest/ tests need the cwd to be utest/
-    
+
     cocos older than 0.6.10 needs patching so that no env var needs to be set,
     the patching is done at method SnapshotSession.install_pyglet_cocos
 
@@ -400,7 +400,7 @@ class SnapshotSession(object):
         text = fmt % (self.asked_py, self.asked_pyglet, self.asked_cocos,
                       self.resolved_py, self.resolved_pyglet, self.resolved_cocos)
         return text
-    
+
     def resolve(self, path_services):
         diagnostic, cmd_python = get_python_cmdline(self.asked_py)
         if diagnostic != "":
@@ -410,7 +410,7 @@ class SnapshotSession(object):
         if diagnostic != "":
             return diagnostic
         self.resolved_py = resolved_py
-        
+
         try:
             gits.checkout(path_services.pyglet, self.asked_pyglet)
             self.resolved_pyglet = gits.WD_short_hash(path_services.pyglet)
@@ -447,7 +447,7 @@ class SnapshotSession(object):
 
         self.pytest_summary = pytest_summary
         self.pytest_link = pytest_link
-        
+
     def ensure_venv(self, path_services):
         # ensure env exists
         path = path_services.venv(self.resolved_py)
@@ -549,7 +549,7 @@ class SnapshotSession(object):
             gits.checkout_file(path_services.cocos, tc.custom_clocks_checkout_str, path)
         # patch cocos/utest for old cocos versions
         pt.patch_if_needed(path_services)
-        
+
         # install cocos
         msg = "installing cocos2d in the venv"
         print(msg)
@@ -597,9 +597,9 @@ class SnapshotSession(object):
                             as_bytes = f.read()
                     except Exception:
                         diag = "Error, could not read file: %s" % path
-                        diags.append(diag)        
+                        diags.append(diag)
                     if  diag=="" and "cocos-testcmp-mark" not in as_bytes.decode("utf8"):
-                        diags.append("Error, cocos setup.py not patched.")                              
+                        diags.append("Error, cocos setup.py not patched.")
 
                     # patched cocos __init__.py in place?
                     diag = ""
@@ -609,7 +609,7 @@ class SnapshotSession(object):
                             as_bytes = f.read()
                     except Exception:
                         diag = "Error, could not read file: %s" % path
-                        diags.append(diag)        
+                        diags.append(diag)
                     if diag=="" and "cocos-testcmp-mark" not in as_bytes.decode("utf8"):
                         diags.append("Error, cocos __init__.py not patched.")
 
@@ -665,7 +665,7 @@ class Cmp(object):
         os.mkdir(path_services.cmp_deltas(self.ordinal))
         res = delta_snapshots(path_services, self.ordinal, db, self.v_ref.id_string, self.v_other.id_string)
         self.scripts_with_non_matchig_snapshots = res
-        
+
 def ensure_cmp(path_services, db, conf_v_ref, conf_v_other):
     cmp = None
     diagnostic, ref_session = ensureSnapshotSession(path_services, db, conf_v_ref)
@@ -715,7 +715,7 @@ def rpt_cmp(path_services, cmp):
     in_ = os.path.join(path_services.support, "template_cmp_report.htm")
     out = path_services.cmp_report(cmp.ordinal)
     templates.render_template_to_file(in_, out, symbols)
-    
+
 class Logg(object):
     def __init__(self, fname):
         self.fname = fname
@@ -738,7 +738,7 @@ def compare(path_services):
     logg.out("info: db initial load - testbeds:", "%s" % db.db.keys())
     diagnostic, cmp = ensure_cmp(path_services, db, tc.v_ref, tc.v_other)
     msg = diagnostic if diagnostic != "" else "info: cmp completed"
-    logg.out(msg)    
+    logg.out(msg)
     print(msg)
     if diagnostic == "":
         rpt_cmp(path_services, cmp)
@@ -754,7 +754,7 @@ def make_reference_snapshot(path_services):
         msg = "error: asked to meke reference snapshot but directory work is dirty"
         logg.out(msg)
         print(msg)
-        return        
+        return
     logg.out("info: building special @ reference snapshot")
     make_reference = True
     db = hl.ensure_db(path_services.db)
@@ -846,7 +846,7 @@ def cache_str():
     lines.append("cmp_ord: %d" % cache["cmp_ord"])
     keys_cmp = sorted([k for k in cache if isinstance(k, tuple) and k[0] == "cmp"])
     for k in keys_cmp:
-        fmt = "%d %s %s" 
+        fmt = "%d %s %s"
         lines.append(fmt % (cache[k].ordinal, k, cache[k]))
     keys_snprun = sorted([k for k in cache if isinstance(k, tuple) and k[0] == "snprun"])
     for k in keys_snprun:
@@ -857,7 +857,7 @@ def cache_str():
 def usage():
     text = __doc__.replace("do_test.py", os.path.basename(__file__))
     print(text)
-    
+
 if __name__ == "__main__":
     task = "usage"
     extra = None

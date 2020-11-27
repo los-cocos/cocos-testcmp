@@ -63,7 +63,7 @@ class PathServices(object):
 
     def cmp_report(self, ordinal):
         return os.path.join(self.work, "%02d_cmp_report.htm" % ordinal)
-        
+
     def cmp_deltas(self, ordinal):
         return os.path.join(self.cmp, "%02d" % ordinal)
 

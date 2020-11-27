@@ -172,7 +172,7 @@ def render_delta(snp_by_scripts, reldir_snp_ref, reldir_snp_other):
                 if delta_1 is None:
                     parts.append("Different size or image mode, no diff.")
                 else:
-                    parts.append(m % (delta_1, delta_2))                    
+                    parts.append(m % (delta_1, delta_2))
     text = "\n".join(parts)
     return text
 

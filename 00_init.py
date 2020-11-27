@@ -13,25 +13,25 @@ def clone_lib(libname, URL, dst):
     cmd_parts = ["git", "clone", URL, dst]
     if subprocess.call(cmd_parts):
         print("\nError, could not clone lib '%s'. Cmd tried:" % libname)
-        print("   ", " ".join(cmd_parts))  
+        print("   ", " ".join(cmd_parts))
         sys.exit(1)
-    
+
 def install_remembercases(python_venv_cmdline, path_remembercases, checkout_str):
     print("\nCheckout the desired remembercases version")
     cmd_parts = ["git", "checkout", checkout_str]
     print("cmdline:", " ".join(cmd_parts))
     if subprocess.call(cmd_parts, cwd=path_remembercases):
         print("\nError, could not checkout remembercases at desired version. Cmd tried:")
-        print("   ", " ".join(cmd_parts))  
+        print("   ", " ".join(cmd_parts))
         sys.exit(1)
     print("\nInstall remembercases in the main_venv_python")
     cmd_parts = list(python_venv_cmdline) + ["-m", "pip", "install", "-e", path_remembercases]
     print("cmdline:", " ".join(cmd_parts))
     if subprocess.call(cmd_parts, cwd=path_remembercases):
         print("\nError, could not install remembercases. Cmd tried:")
-        print("   ", " ".join(cmd_parts))  
+        print("   ", " ".join(cmd_parts))
         sys.exit(1)
-    
+
 
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -57,7 +57,7 @@ print("\nCheckout the cocos version where we want the tests come from")
 cmd_parts = ["git", "checkout", te.test_checkout_str]
 if subprocess.call(cmd_parts, cwd=path_services.cocos):
     print("\nError, could not checkout cocos at desired version. Cmd tried:")
-    print("   ", " ".join(cmd_parts))  
+    print("   ", " ".join(cmd_parts))
     sys.exit(1)
 
 print("\nCopy tests to run")

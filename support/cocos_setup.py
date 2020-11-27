@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""cocos setup.py minus the pyglet dep 
+"""cocos setup.py minus the pyglet dep
 """
 
 # cocos-testcmp-mark <- let it alone
@@ -45,7 +45,7 @@ setup(
         ("Topic :: Software Development :: Libraries :: Python Modules"),
         ("Topic :: Games/Entertainment"),
         ],
- 
+
     packages = ['cocos', 'cocos/actions', 'cocos/audio', 'cocos/layer', 'cocos/scenes'],
     package_data={'cocos': ['resources/*.*']},
 

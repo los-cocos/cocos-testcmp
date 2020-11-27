@@ -13,13 +13,13 @@ import sys
 import os
 
 import remembercases.db as dbm
-import remembercases.doers as doers 
+import remembercases.doers as doers
 import remembercases.image_comparison as imc
 import helpers as hl
 
 # filename to persist the db
 filename_persist = 'initial.dat'
-# change the string to identify about which machine is the info collected 
+# change the string to identify about which machine is the info collected
 #testbed = 'ati 6570'
 testbed = 'cpu intel E7400, gpu ati 6570 with Catalyst 11-5 drivers, win xp sp3'
 ### dir used to calculate canonical paths

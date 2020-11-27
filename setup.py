@@ -47,7 +47,7 @@ setup(
         ("Topic :: Software Development :: Libraries :: Python Modules"),
         ("Topic :: Games/Entertainment"),
         ],
- 
+
     packages = ['support',],
     #package_data={'cocos': ['resources/*.*']},
     package_data={},

@@ -15,7 +15,7 @@ try:
 except ImportError:
     print(msg)
     sys.exit(1)
-    
+
 import os
 import pprint
 import helpers as hl
@@ -36,7 +36,7 @@ def progress_report(db, verbose=False):
         'IOerror',
         'testrun_pass',
         'testrun_not_pass',
-        'not_inspected', 
+        'not_inspected',
         'testrun_present',
         'outdated_weak',
         ]
@@ -135,7 +135,7 @@ def update_3(db, filename_persist, snapshots_dir, snapshots_reference_dir):
         test/test_blink.py : changed test, changed library code
         test/test_callfunc.py
         test/test_callfuncs.py
-        test/test_corner_swap.py 
+        test/test_corner_swap.py
         test/test_decorator.py
         test/test_hide.py
         test/test_hierarchy.py
@@ -154,7 +154,7 @@ def update_3(db, filename_persist, snapshots_dir, snapshots_reference_dir):
     candidates = doers.scripts_names_from_text(text, end_mark=':')
     checked_in, unknown, move_failed = hl.update_testrun__pass(db,
                                         filename_persist, candidates,
-                                        snapshots_dir, snapshots_reference_dir)    
+                                        snapshots_dir, snapshots_reference_dir)
 
     return checked_in, unknown, move_failed
 
@@ -207,7 +207,7 @@ def update_6(db, filename_persist, snapshots_dir, snapshots_reference_dir):
         test/test_transition_flipy.py
         test/test_transition_movein_t.py
         test/test_transition_shrink_grow.py
-        test/test_transition_shuffle.py 
+        test/test_transition_shuffle.py
         test/test_transition_slidein_l.py
         test/test_transition_splitcols.py
         test/test_transition_splitrows.py
@@ -246,7 +246,7 @@ def update_6(db, filename_persist, snapshots_dir, snapshots_reference_dir):
     candidates = doers.scripts_names_from_text(text, end_mark=':')
     checked_in, unknown, move_failed = hl.update_testrun__pass(db,
                                         filename_persist, candidates,
-                                        snapshots_dir, snapshots_reference_dir)    
+                                        snapshots_dir, snapshots_reference_dir)
 
     return checked_in, unknown, move_failed
 
@@ -293,7 +293,7 @@ def update_9(db, filename_persist, snapshots_dir, snapshots_reference_dir):
     candidates = doers.scripts_names_from_text(text, end_mark=':')
     checked_in, unknown, move_failed = hl.update_testrun__pass(db,
                                         filename_persist, candidates,
-                                        snapshots_dir, snapshots_reference_dir)    
+                                        snapshots_dir, snapshots_reference_dir)
 
     return checked_in, unknown, move_failed
 
@@ -314,7 +314,7 @@ def update_9(db, filename_persist, snapshots_dir, snapshots_reference_dir):
 ##    """ Reflect some test renames (added but without testinfo): delete, add
 ##        If there were snapshots or testrun props more caoutious aproach is
 ##        needed"""
-##    
+##
 ##    text1 = """
 ##        test/test_rotate_move_reverse.py
 ##        test/test_local_coordinates.py
@@ -367,7 +367,7 @@ def update_19(db, filename_persist, snapshots_dir, snapshots_reference_dir):
     candidates = doers.scripts_names_from_text(text, end_mark=':')
     checked_in, unknown, move_failed = hl.update_testrun__pass(db,
                                         filename_persist, candidates,
-                                        snapshots_dir, snapshots_reference_dir)    
+                                        snapshots_dir, snapshots_reference_dir)
 
     return checked_in, unknown, move_failed
 
@@ -385,7 +385,7 @@ def update_21(db, filename_persist, snapshots_dir, snapshots_reference_dir):
     candidates = doers.scripts_names_from_text(text, end_mark=':')
     checked_in, unknown, move_failed = hl.update_testrun__pass(db,
                                         filename_persist, candidates,
-                                        snapshots_dir, snapshots_reference_dir)    
+                                        snapshots_dir, snapshots_reference_dir)
 
     return checked_in, unknown, move_failed
 
@@ -393,7 +393,7 @@ def update_21(db, filename_persist, snapshots_dir, snapshots_reference_dir):
 def update_22(db, filename_persist, snapshots_dir, snapshots_reference_dir):
     """
     Enter testrun info 'fail' or 'error' for some tests
-    
+
     'fail' : The test is properly writen to demo some feature and snapshots
     reflects what is seen in an interactive session but the images show the
     feature renders in an undesired way. This point to a library error.
@@ -402,7 +402,7 @@ def update_22(db, filename_persist, snapshots_dir, snapshots_reference_dir):
     because they are one or many of the following problems:
 
         Test is not properly writen (logical errors in the test code)
-        
+
         Technical problems with the snapshots machinery ( the snapshots don't
         reflect an interactive session )
 
@@ -441,7 +441,7 @@ def update_22(db, filename_persist, snapshots_dir, snapshots_reference_dir):
     testrun_props_by_candidate = {}
     for name in data:
         testrun_props_by_candidate[name] = dict([(ren_key[k], data[name][k]) for k in data[name]])
-    
+
     hl.update_testrun__bad(db, filename_persist, testrun_props_by_candidate,
                            snapshots_dir, snapshots_reference_dir)
 
@@ -458,7 +458,7 @@ def update_23(db, filename_persist, snapshots_dir, snapshots_reference_dir):
     candidates = doers.scripts_names_from_text(text, end_mark=':')
     checked_in, unknown, move_failed = hl.update_testrun__pass(db,
                                         filename_persist, candidates,
-                                        snapshots_dir, snapshots_reference_dir)    
+                                        snapshots_dir, snapshots_reference_dir)
 
     return checked_in, unknown, move_failed
 
@@ -469,7 +469,7 @@ def update_23(db, filename_persist, snapshots_dir, snapshots_reference_dir):
 
 # filename to persist the db
 filename_persist = 'initial.dat'
-# change the string to identify about which machine is the info collected 
+# change the string to identify about which machine is the info collected
 testbed = 'cocos master, pyglet master'
 # dir used to calculate canonical paths
 basepath = '../..'
@@ -495,7 +495,7 @@ if clean:
     candidates, unknowns = hl.get_scripts(db, 'all')
     assert len(unknowns)==0
     assert candidates == set(canonical_names)
-    
+
     # scan candidates to get info needed by update snapshots
     scripts, unknowns = hl.update_scanprops(db, filename_persist, candidates)
     assert scripts==candidates
@@ -508,7 +508,7 @@ if clean:
     scripts, unknowns = hl.update_snapshots(db, filename_persist, candidates,
                                             snapshots_dir)
     assert len(unknowns)==0
-    
+
 ##    # asses these tests pass human inspection; store snapshots for reference
 ##    update_3(db, filename_persist, snapshots_dir, snapshots_reference_dir)
 ##
@@ -562,7 +562,7 @@ print(hl.rpt_detail_diagnostics(db, 'testinfo_invalid'))
 # tests that don't have testinfo at all
 print(hl.rpt(db, ['testinfo_missing'], verbose=True))
 
-# tests that can't be readed, probably due to name mismatch 
+# tests that can't be readed, probably due to name mismatch
 # print(hl.rpt(db, ['IOerror']))
 
 # print detailed info about test that tried but failed to take snapshots
@@ -597,4 +597,3 @@ print(hl.rpt(db, ['testrun_not_pass'], verbose=True))
 # report differences between 1st iterative testbed and a clean build
 #print(hl.rpt_compare_testbeds_by_entities('initial_orig.dat', 'ati 6570',
 #                                'initial_clean.dat', 'ati 6570', verbose=False))
-

@@ -35,7 +35,7 @@ def randrange(*args):
     Return a randomly selected element from range(start, stop, step).
     This is equivalent to choice(range(start, stop, step)),
     but doesn't actually build a range object.
-    
+
     NOTE: this implementation is inefficient and can have an huge overhead
     on memory usage; it is intended for testing purposes and small ranges.
     """
@@ -50,7 +50,7 @@ def randrange(*args):
     else:
         stop = args[0]
     return choice(range(start, stop, step))
-random.randrange = randrange    
+random.randrange = randrange
 
 import pyglet
 import cocos
@@ -81,7 +81,7 @@ def quit_pyglet_app():
 def take_snapshot_cocos_app(fname):
     pyglet.image.get_buffer_manager().get_color_buffer().save(fname)
     #sys.stderr.write('\nafter take_snapshot_cocos_app')
-    
+
 
 # script_name the basename only
 def main(script_name, stored_testinfo, snapshots_dir):
@@ -105,7 +105,7 @@ def main(script_name, stored_testinfo, snapshots_dir):
     assert diagnostic == ''
     clock = cc.get_autotest_clock(screen_sampler)
     cocos.custom_clocks.set_app_clock(clock)
-    
+
     set_init_interceptor()
     #sys.stderr.write('\nafter interceptor')
     if hasattr(script_module, 'autotest'):

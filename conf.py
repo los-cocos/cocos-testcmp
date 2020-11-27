@@ -42,11 +42,11 @@ packages = {
     "six": "six",
     "numpy": "numpy",
     "PIL": "pillow<8", # '<8' needed for pyglet <1.5.9; py39's pillow wants 8+ in windows
-    "pytest": "pytest", 
+    "pytest": "pytest",
     }
 
 ### <- This section must be configured before the 00_init.py run
-    
+
 
 ### -> Configure this for each comparison run desired
 

@@ -60,7 +60,7 @@ def proceed(fname):
     tests = get_list(fname)
     cmd = 'py.test -v ' + ' '.join(tests)
     print(cmd)
-    os.system(cmd) 
+    os.system(cmd)
 
 if len(sys.argv)!=2:
     usage()
@@ -74,7 +74,7 @@ def patch_runner1(path_services):
     with open(fname, "rb") as f:
         as_bytes = f.read()
     in_ = as_bytes.decode("utf8")
-    start = in_.find("def proceed")        
+    start = in_.find("def proceed")
     out = prefix + in_[:start] + new_runner1_tail
     as_bytes = out.encode("utf8")
     with open(fname, "wb") as f:
@@ -110,7 +110,7 @@ def patch_if_needed(path_services):
 
 ------------------
 """
-#where the '------------------\n' comes from the runner in do_test 
+#where the '------------------\n' comes from the runner in do_test
 def get_summary_line(text):
     """
     text assumed the output captured in do_test func pytest_from_venv
