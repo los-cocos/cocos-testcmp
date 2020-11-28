@@ -105,25 +105,25 @@ tries = 5
 
 #debug
 text = """
-        test/test_sprite.py
-        test/test_base.py
-        test/test_subscene_events.py
+       test/test_sprite.py
+       test/test_base.py
+       test/test_subscene_events.py
        """
 
-text =  """
-        test/test_action_non_interval.py
-        test/test_animation.py
-        test/test_rect.py
-        test/test_scrolling_manager_without_tiles.py
-        test/test_scrolling_manager_without_tiles_autoscale.py
-        test/test_tiles_autotest.py
-        test/test_tmx_autotest.py
-        """
+text = """
+       test/test_action_non_interval.py
+       test/test_animation.py
+       test/test_rect.py
+       test/test_scrolling_manager_without_tiles.py
+       test/test_scrolling_manager_without_tiles_autoscale.py
+       test/test_tiles_autotest.py
+       test/test_tmx_autotest.py
+       """
 
 # sanity checks
 diagnostic = ''
 if not os.path.exists(snapshots_reference_dir):
-    diagnostic = "Snapshots references dir not found:%s"%snapshots_reference_dir
+    diagnostic = "Snapshots references dir not found:%s" % snapshots_reference_dir
 
 db = dbm.db_load(filename_persist, default_testbed=testbed)
 ##knowns, unknowns = db.entities(fn_allow=hl.fn_allow_testrun_pass, candidates=None)
@@ -155,9 +155,9 @@ if unequals:
 
 if untested:
     tmp = doers.join_sorted(untested)
-    msg = ( msg + '\n\n' +
-            ": Untested (unknown, bad testinfo or don't want sanapshots)\n\n" +
-            tmp )
+    msg = (msg + '\n\n' +
+           ": Untested (unknown, bad testinfo or don't want sanapshots)\n\n" +
+           tmp)
 
 sys.stdout.write(msg)
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """cocos setup.py minus the pyglet dep
 """
-
+# flake8: noqa
 # cocos-testcmp-mark <- let it alone
 
 __version__ = "777"

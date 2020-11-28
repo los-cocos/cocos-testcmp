@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """cocos/__init__.py with pyglet checks striped"""
-
+# flake8: noqa
 from __future__ import division, print_function, unicode_literals
 
 # cocos-testcmp-mark <- let it alone

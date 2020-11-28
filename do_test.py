@@ -26,12 +26,13 @@ Subcommands:
 from __future__ import division, print_function, unicode_literals
 import six
 
-import os, sys
-import pickle
-from collections import namedtuple
 import copy
+import os
+import pickle
 import shutil
+import sys
 import traceback as tb
+from collections import namedtuple
 
 #import support
 import support.fs as fs
@@ -51,6 +52,7 @@ import remembercases.image_comparison as ri
 cache = None
 cache_path = None
 
+
 def save_cache():
     global cache, cache_path
     # protocol 2 is compatible with both py2.x and 3.x , protocol 3 is py3 only
@@ -65,11 +67,13 @@ def save_pickle(fname, obj):
         pickler = pickle.Pickler(f, protocol=2)
         pickler.dump(obj)
 
+
 def load_pickle(fname):
     with open(fname, "rb") as f:
         unpickler = pickle.Unpickler(f)
         obj = unpickler.load()
     return obj
+
 
 def get_python_cmdline(asked_py):
     diagnostic = ""
@@ -87,7 +91,8 @@ def get_python_cmdline(asked_py):
             diagnostic = msg % asked_py
     return diagnostic, cmd_python
 
-#!! py 2.7 reporta --version en stderr, no en stdout
+
+# !! py 2.7 reporta --version en stderr, no en stdout
 # example output expected: 'Python 2.7.18', 'Python 3.7.7'
 def query_python_version(python_cmdline):
     cmdline = list(python_cmdline)
@@ -100,13 +105,14 @@ def query_python_version(python_cmdline):
         msg = ("Error while running: '%s'\n" +
                "Probably that python version is not available or wasn't correctly\n" +
                "configured in test_conf.py")
-        diagnostic =  msg % " ".join(cmdline)
+        diagnostic = msg % " ".join(cmdline)
     if diagnostic == "":
         try:
             vs = out.split(" ")[0]
         except Exception:
             diagnostic = "Unexpected output of command '%s'\n" % " ".join(cmdline)
     return diagnostic, vs
+
 
 def make_venv(path_venv, python_cmdline, asked_py):
     cmdline = list(python_cmdline)
@@ -115,7 +121,7 @@ def make_venv(path_venv, python_cmdline, asked_py):
     else:
         cmdline.extend(["-m", "venv", path_venv])
     try:
-        out = cm.cmd_run_ok(cmdline)
+        cm.cmd_run_ok(cmdline)
         diagnostic = ""
         #?
         py_cmd_venv = get_py_cmd_venv(path_venv)
@@ -126,8 +132,10 @@ def make_venv(path_venv, python_cmdline, asked_py):
         py_cmd_venv = None
     return diagnostic, py_cmd_venv
 
+
 def get_py_cmd_venv(path_venv):
-    return  [os.path.join(path_venv, "Scripts", "python"),]
+    return [os.path.join(path_venv, "Scripts", "python"), ]
+
 
 def query_venv_python_version(py_cmd_venv):
     cmdline = py_cmd_venv + ["-c", "import sys;sys.stdout.write(sys.version)"]
@@ -138,13 +146,14 @@ def query_venv_python_version(py_cmd_venv):
     except cm.CmdExecutionError:
         msg = ("Error while probing activated venv\n" +
                "cmdline:\n")
-        diagnostic =  msg % " ".join(cmdline)
+        diagnostic = msg % " ".join(cmdline)
     if diagnostic == "":
         try:
             vs = out.split(" ")[0]
         except Exception:
             diagnostic = "Unexpected output of command '%s'\n" % " ".join(cmdline)
     return diagnostic, vs
+
 
 def package_in_venv(py_cmd_venv, import_name):
     cmdline = py_cmd_venv + ["-c", "import %s" % import_name]
@@ -155,6 +164,7 @@ def package_in_venv(py_cmd_venv, import_name):
     except cm.CmdExecutionError:
         found = False
     return found
+
 
 def pip_install_in_venv(py_cmd_venv, pip_name, logfname):
     cmdline = py_cmd_venv + ["-m", "pip", "install", pip_name]
@@ -173,6 +183,7 @@ def pip_install_in_venv(py_cmd_venv, pip_name, logfname):
         f.write(as_bytes)
     return diagnostic
 
+
 def pip_uninstall_in_venv(py_cmd_venv, pip_name):
     cmdline = py_cmd_venv + ["-m", "pip", "uninstall", "-y", pip_name]
 #    ["python", "-m", "pip", "uninstall", pip_name]
@@ -185,6 +196,7 @@ def pip_uninstall_in_venv(py_cmd_venv, pip_name):
     diagnostic = ""
     return diagnostic
 
+
 def pip_dev_install_in_venv(py_cmd_venv, path):
     cmdline = py_cmd_venv + ["-m", "pip", "install", "-e", path]
 #    cmdline = ["python", "-m", "pip", "install", "-e", path]
@@ -192,9 +204,10 @@ def pip_dev_install_in_venv(py_cmd_venv, path):
         cm.cmd_run_ok(cmdline)
         diagnostic = ""
     except cm.CmdExecutionError:
-        msg =  "Error while trying an install with cmdline:\n%s"
+        msg = "Error while trying an install with cmdline:\n%s"
         diagnostic = msg % " ".join(cmdline)
     return diagnostic
+
 
 def package_dir_in_venv(py_cmd_venv, import_name):
     prog = ("import os, sys, %s;" +
@@ -208,14 +221,15 @@ def package_dir_in_venv(py_cmd_venv, import_name):
     except cm.CmdExecutionError:
         msg = ("Error while getting a pkgdir in the venv\n" +
                "cmdline:%s\n")
-        diagnostic =  msg % " ".join(cmdline)
+        diagnostic = msg % " ".join(cmdline)
     return diagnostic, out
+
 
 def pytest_from_venv(py_cmd_venv, cwd, timeout=60):
     cmd_pytest = os.path.join(os.path.dirname(py_cmd_venv[0]), "pytest")
     cmdline = [cmd_pytest, "--cache-clear"]
     killed, returncode, err, out = cm.cmd_run(cmdline, cwd=cwd, timeout=timeout)
-    cmdstr = " ".join(cmdline)
+    #cmdstr = " ".join(cmdline)
     #parts = ["Error while running cmd\n", "    " + cmdstr, "details:"]
     parts = []
     parts.append("cwd: %s" % cwd)
@@ -227,7 +241,9 @@ def pytest_from_venv(py_cmd_venv, cwd, timeout=60):
     text = "\n".join(parts)
     return text
 
+
 ComboVersion = namedtuple("ComboVersion", "py pyglet cocos")
+
 
 def ensureSnapshotSession(path_services, db, combo_version_asked, make_reference=False):
     logg.out("info: ensureSnapshotSession starts - version asked:", combo_version_asked, flush=True)
@@ -235,7 +251,7 @@ def ensureSnapshotSession(path_services, db, combo_version_asked, make_reference
         # session to compare the reference session to other
         # the special reference session included with cocos-testcmp
         for k in cache:
-            if isinstance(k, tuple) and k[0]=="snprun" and k[1].startswith("@"):
+            if isinstance(k, tuple) and k[0] == "snprun" and k[1].startswith("@"):
                 snp_session = copy.copy(cache[k])
                 snp_session.cached = True
                 diagnostic = ""
@@ -250,7 +266,9 @@ def ensureSnapshotSession(path_services, db, combo_version_asked, make_reference
     diagnostic = snp_session.resolve(path_services)
     if diagnostic != "":
         return diagnostic, None
-    logg.out("info: ensureSnapshotSession - resolve:", snp_session.resolved_py, snp_session.resolved_pyglet, snp_session.resolved_cocos, flush=True)
+    fmt = "info: ensureSnapshotSession - resolve: %s, %s, %s"
+    msg = fmt % (snp_session.resolved_py, snp_session.resolved_pyglet, snp_session.resolved_cocos)
+    logg.out(msg, flush=True)
     c_key = snp_session.cache_key(make_reference)
     if c_key in cache:
         logg.out("info: ensureSnapshotSession - session in cache", flush=True)
@@ -304,8 +322,10 @@ def ensureSnapshotSession(path_services, db, combo_version_asked, make_reference
             snp_session = None
     return diagnostic, snp_session
 
+
 def fn_fname_test_py(filename):
     return filename.startswith('test_') and filename.endswith('.py')
+
 
 def take_snapshots(db, db_path, snapshots_dir, tests_dir, py_cmd=None):
     """runs the test_*.py scripts in 'tests_dir', storing screenshots in
@@ -342,21 +362,23 @@ def take_snapshots(db, db_path, snapshots_dir, tests_dir, py_cmd=None):
     hl.add_entities(db, db_path, canonical_names)
     candidates, unknowns = hl.get_scripts(db, 'all')
     if len(candidates) != len(canonical_names):
-        msg = "Some scripts where unexpectly not selected to test: %s"
-        diags.append(set(canonical_names) - candidates)
+        fmt = "Some scripts where unexpectly not selected to test: %s"
+        msg = fmt % (set(canonical_names) - candidates)
+        diags.append(msg)
 
     # scan candidates to get info needed by update snapshots
     scripts, unknowns = hl.update_scanprops(db, db_path, candidates)
 
     # filter candidates to retain the ones that can be run
     candidates, unknowns = hl.get_scripts(db, 'testinfo_valid')
-    assert len(unknowns)==0
+    assert len(unknowns) == 0
 
     # do snapshots
     valid_scripts, rejected = hl.update_snapshots(db, db_path, candidates,
                                             snapshots_dir, py_cmd=py_cmd)
     diagnostics = "\n".join(diags)
     return diagnostics
+
 
 def run_unittests(py_cmd_venv, cwd, logfname, timeout=60):
     """
@@ -382,6 +404,7 @@ def run_unittests(py_cmd_venv, cwd, logfname, timeout=60):
         f.write(as_bytes)
     s = pt.get_summary_line(text)
     return s
+
 
 class SnapshotSession(object):
     def __init__(self, combo_version_asked):
@@ -452,7 +475,8 @@ class SnapshotSession(object):
         # ensure env exists
         path = path_services.venv(self.resolved_py)
         if not os.path.exists(path):
-            logg.out("info: SnapshotSession.ensure_venv - venv do not exist; building...", flush=True)
+            fmt = "info: SnapshotSession.ensure_venv - venv do not exist; building..."
+            logg.out(fmt, flush=True)
             diagnostic, py_cmd_venv = make_venv(path, self.cmd_python, self.asked_py)
             if diagnostic != "":
                 return diagnostic
@@ -598,7 +622,7 @@ class SnapshotSession(object):
                     except Exception:
                         diag = "Error, could not read file: %s" % path
                         diags.append(diag)
-                    if  diag=="" and "cocos-testcmp-mark" not in as_bytes.decode("utf8"):
+                    if diag == "" and "cocos-testcmp-mark" not in as_bytes.decode("utf8"):
                         diags.append("Error, cocos setup.py not patched.")
 
                     # patched cocos __init__.py in place?
@@ -610,15 +634,18 @@ class SnapshotSession(object):
                     except Exception:
                         diag = "Error, could not read file: %s" % path
                         diags.append(diag)
-                    if diag=="" and "cocos-testcmp-mark" not in as_bytes.decode("utf8"):
+                    cond = (diag == "" and
+                            "cocos-testcmp-mark" not in as_bytes.decode("utf8"))
+                    if cond:
                         diags.append("Error, cocos __init__.py not patched.")
 
-        diags = [s for s in diags if s!= "" ]
+        diags = [s for s in diags if s != ""]
         if diags:
             diagnostic = "\n".join(diags)
         else:
             diagnostic = ""
         return diagnostic
+
 
 def delta_snapshots(path_services, cmp_ordinal, db, testbed_1, testbed_2):
     scripts_with_non_matching_snapshots = {}
@@ -649,8 +676,8 @@ def delta_snapshots(path_services, cmp_ordinal, db, testbed_1, testbed_2):
                 differents.append((name, delta_1, delta_2))
         if len(differents):
             scripts_with_non_matching_snapshots[script] = differents
-#    print("delta_snapshots - len(scripts_with_non_matching_snapshots)", len(scripts_with_non_matching_snapshots))
     return scripts_with_non_matching_snapshots
+
 
 class Cmp(object):
     def __init__(self, v_ref, v_other, ordinal):
@@ -663,8 +690,10 @@ class Cmp(object):
     def compare(self, path_services, db):
         self.scripts_with_non_matchig_snapshots = None
         os.mkdir(path_services.cmp_deltas(self.ordinal))
-        res = delta_snapshots(path_services, self.ordinal, db, self.v_ref.id_string, self.v_other.id_string)
+        res = delta_snapshots(path_services, self.ordinal, db,
+                              self.v_ref.id_string, self.v_other.id_string)
         self.scripts_with_non_matchig_snapshots = res
+
 
 def ensure_cmp(path_services, db, conf_v_ref, conf_v_other):
     cmp = None
@@ -696,6 +725,7 @@ def ensure_cmp(path_services, db, conf_v_ref, conf_v_other):
         save_cache()
     return diagnostic, cmp
 
+
 def rpt_cmp(path_services, cmp):
     # prepare delta snapshpts section
     reldir_snp_ref = path_services.snp_versioned_relative(cmp.v_ref.id_string)
@@ -710,11 +740,11 @@ def rpt_cmp(path_services, cmp):
     for s in symbols:
         if s != "section_cmp_snp_diff":
             print(s, repr(symbols[s]))
-            k = str(s)
     # render template
     in_ = os.path.join(path_services.support, "template_cmp_report.htm")
     out = path_services.cmp_report(cmp.ordinal)
     templates.render_template_to_file(in_, out, symbols)
+
 
 class Logg(object):
     def __init__(self, fname):
@@ -732,6 +762,7 @@ class Logg(object):
         if flush:
             self.f.flush()
 
+
 def compare(path_services):
     global logg, cache, cache_path
     db = hl.ensure_db(path_services.db)
@@ -742,6 +773,7 @@ def compare(path_services):
     print(msg)
     if diagnostic == "":
         rpt_cmp(path_services, cmp)
+
 
 def make_reference_snapshot(path_services):
     global logg, cache, cache_path
@@ -769,6 +801,7 @@ def make_reference_snapshot(path_services):
     logg.out(msg)
     print(msg)
 
+
 def main(task, extra):
     global logg, cache, cache_path
     base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -788,7 +821,8 @@ def main(task, extra):
 
     if task == "del_all_cmp":
         # del all 'cmp'
-        to_del = [key for key in cache if isinstance(key, tuple) and key[0]=="cmp"]
+        to_del = [key for key in cache
+                  if isinstance(key, tuple) and key[0] == "cmp"]
         for key in to_del:
             path = path_services.cmp_deltas(cache[key].ordinal)
             if os.path.isdir(path):
@@ -811,8 +845,9 @@ def main(task, extra):
                 shutil.rmtree(path)
             to_del = None
             for key in cache:
-                if (isinstance(key, tuple) and key[0]=="cmp"
-                    and cache[key].ordinal == ordinal):
+                cond = (isinstance(key, tuple) and (key[0] == "cmp")
+                        and (cache[key].ordinal == ordinal))
+                if cond:
                     to_del = key
                     break
             if to_del is not None:
@@ -840,6 +875,7 @@ def main(task, extra):
     elif task == "usage":
         usage()
 
+
 def cache_str():
     global logg, cache, cache_path
     lines = ["Cache contents"]
@@ -854,9 +890,11 @@ def cache_str():
     text = "\n".join(lines)
     return text
 
+
 def usage():
     text = __doc__.replace("do_test.py", os.path.basename(__file__))
     print(text)
+
 
 if __name__ == "__main__":
     task = "usage"

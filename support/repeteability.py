@@ -1,21 +1,15 @@
-from __future__ import division, print_function, unicode_literals
-
-import sys
-msg = """
+"""
 To run this script you need the package remembercases, which can be found at
-https://bitbucket.org/ccanepa/remembercases
+https://gitlab.com/ccanepa/remembercases
 Instructions about how to install in the same page.
 """
-try:
-    import remembercases
-except ImportError:
-    print(msg)
-    sys.exit(1)
+from __future__ import division, print_function, unicode_literals
 
-import os
-import pprint
-import pickle
 import copy
+import os
+import pickle
+import pprint  # noqa: F401
+import sys  # noqa: F401
 
 import remembercases.db as dbm
 import helpers as hl
@@ -32,15 +26,17 @@ def new(db_fname, testbed, stats_fname, candidates, limit, samples_dir):
     with open(stats_fname, 'wb') as f:
         pickle.dump(session, f, 2)
 
+
 def load_stats(stats_fname):
     with open(stats_fname, 'rb') as f:
         session = pickle.load(f)
     db_fname, testbed, samples_dir, res = session
-    overal_md5, elapsed, rounds, stats_by_script_name, stats_by_snapshot_name  = res
+    overal_md5, elapsed, rounds, stats_by_script_name, stats_by_snapshot_name = res
     return (db_fname, testbed, samples_dir,
             overal_md5, elapsed, rounds,
             stats_by_script_name, stats_by_snapshot_name
             )
+
 
 def more_rounds(stats_fname, limit, debug=False):
     """
@@ -86,10 +82,10 @@ def more_rounds(stats_fname, limit, debug=False):
     for snap in stats_by_snapshot_name:
         d = stats_by_snapshot_name[snap]
         d_2 = stats_by_snapshot_name_2[snap]
-        common = [ k for k in d if k in d_2 ]
+        common = [k for k in d if k in d_2]
         for k in common:
             d[k] += d_2[k]
-        only_d_2 = [ k for k in d_2 if k not in d ]
+        only_d_2 = [k for k in d_2 if k not in d]
         for k in only_d_2:
             d[k] = d_2[k]
 
@@ -108,12 +104,13 @@ def more_rounds(stats_fname, limit, debug=False):
         session3 = pickle.load(f)
     assert session3 == session
 
+
 def expand_stats(db, rounds, stats_by_script_name, stats_by_snapshot_name):
 
     agregated_stats_by_snap = {}
     for snap in stats_by_snapshot_name:
         d = stats_by_snapshot_name[snap]
-        counts = [ d[k] for k in d ]
+        counts = [d[k] for k in d]
         taken = sum(counts)
         most_common = max(counts)
         agregated_stats_by_snap[snap] = {
@@ -128,58 +125,60 @@ def expand_stats(db, rounds, stats_by_script_name, stats_by_snapshot_name):
         d = expaned_stats_by_script_name[name]
         expected_snapshots = db.get_prop_value(name, 'expected_snapshots')
         d['snap_expected'] = rounds * len(expected_snapshots)
-        d['snap_taken'] = sum( [ agregated_stats_by_snap[sn]['taken']
-                                               for sn in expected_snapshots ])
+        d['snap_taken'] = sum([agregated_stats_by_snap[sn]['taken']
+                               for sn in expected_snapshots])
         d['snap_missings'] = d['snap_expected'] - d['snap_taken']
-        d['sum_most_common'] = sum( [ agregated_stats_by_snap[sn]['most_common']
-                                               for sn in expected_snapshots ])
+        d['sum_most_common'] = sum([agregated_stats_by_snap[sn]['most_common']
+                                    for sn in expected_snapshots])
         d['repeteable'] = (d['sum_most_common'] == d['snap_expected'])
         d['repeteability'] = d['sum_most_common'] / d['snap_expected']
         d['excess_variants'] = (
-            sum( [ agregated_stats_by_snap[sn]['variants'] - 1
-                                               for sn in expected_snapshots ]))
+            sum([agregated_stats_by_snap[sn]['variants'] - 1
+                 for sn in expected_snapshots]))
 
     return agregated_stats_by_snap, expaned_stats_by_script_name
+
 
 def rpt_compact(elapsed, rounds, res_expand, verbose=False):
     agregated_stats_by_snap, expaned_stats_by_script_name = res_expand
     text_parts = []
     stats = expaned_stats_by_script_name
     num_scripts = len(stats)
-    text_parts.append("Total rounds: %d"%rounds)
-    text_parts.append("Total time elapsed: %5.1f minutes"%(elapsed / 60))
+    text_parts.append("Total rounds: %d" % rounds)
+    text_parts.append("Total time elapsed: %5.1f minutes" % (elapsed / 60))
     t_sec = elapsed / rounds
-    text_parts.append("Elapsed time per round: %4.1f minutes"%(t_sec/60))
-    text_parts.append("Scripts tested: %d"%num_scripts)
-    repeteables = set([ k for k in stats if stats[k]['repeteable']])
-    text_parts.append("Totally repeteable scripts: ( %d / %d)"%
-                                                (len(repeteables), num_scripts))
+    text_parts.append("Elapsed time per round: %4.1f minutes" % (t_sec / 60))
+    text_parts.append("Scripts tested: %d" % num_scripts)
+    repeteables = set([k for k in stats if stats[k]['repeteable']])
+    text_parts.append("Totally repeteable scripts: ( %d / %d)" %
+                      (len(repeteables), num_scripts))
     if verbose:
         pass
 
-    wmissings = set([ k for k in stats if stats[k]['snap_missings'] >0 ])
-    text_parts.append("Scripts missing some snapshots: ( %d / %d)"%
-                                                (len(wmissings), num_scripts))
+    wmissings = set([k for k in stats if stats[k]['snap_missings'] > 0])
+    text_parts.append("Scripts missing some snapshots: ( %d / %d)" %
+                      (len(wmissings), num_scripts))
     if verbose:
         pass
 
-    werror = set([ k for k in stats if stats[k]['errs'] >0 ])
-    text_parts.append("Scripts which errored in some run: ( %d / %d)"%
-                                                (len(werror), num_scripts))
+    werror = set([k for k in stats if stats[k]['errs'] > 0])
+    text_parts.append("Scripts which errored in some run: ( %d / %d)" %
+                      (len(werror), num_scripts))
     if verbose:
         pass
 
-    qrepeteables = set([ k for k in stats if k not in repeteables ])
-    text_parts.append("Scripts not perfectly repeteables: ( %d / %d)"%
-                                                (len(qrepeteables), num_scripts))
+    qrepeteables = set([k for k in stats if k not in repeteables])
+    text_parts.append("Scripts not perfectly repeteables: ( %d / %d)" %
+                      (len(qrepeteables), num_scripts))
     for name in sorted(qrepeteables):
-        text_parts.append('\t%s'%name)
+        text_parts.append('\t%s' % name)
 
     if verbose:
         pass
 
     text = '\n'.join(text_parts)
     return text
+
 
 def report(stats_fname, rpt_function):
     (db_fname, testbed, samples_dir,
@@ -193,10 +192,11 @@ def report(stats_fname, rpt_function):
     text = rpt_function(elapsed, rounds, res_expand, verbose=False)
     return text
 
+
 # test main
 # set hardcoded params
 
-db_fname = 'initial.dat' # must exist as a result of running recon.py
+db_fname = 'initial.dat'  # must exist as a result of running recon.py
 testbed = 'cpu intel E7400, gpu ati 6570 with Catalyst 11-5 drivers, win xp sp3'
 stats_fname = 'rep_stats.pkl'
 samples_dir = '../../test/saux'
@@ -205,15 +205,15 @@ samples_dir = '../../test/saux'
 # you can spend in runs.
 # To add more rounds to a stats, set clean=False ; it is fine to have
 # different limit when adding rounds
-#candidates = ['test/test_accel_amplitude.py', 'test/test_base.py']
-candidates = None # means all tests
+# candidates = ['test/test_accel_amplitude.py', 'test/test_base.py']
+candidates = None  # means all tests
 # debug
-#candidates = ['test/test_target.py', 'test/test_sprite_aabb.py']
+# candidates = ['test/test_target.py', 'test/test_sprite_aabb.py']
 
-clean = True # True starts a new stats serie
-debug_merge = False # Normal is False, use True to debug combinning stats
-#limit = 2 #int means rounds
-limit = 20.0 #float means minutes; will be exceeded to complete last round
+clean = True  # True starts a new stats serie
+debug_merge = False  # Normal is False, use True to debug combinning stats
+#limit = 2  # int means rounds
+limit = 20.0  # float means minutes; will be exceeded to complete last round
 
 if clean:
     new(db_fname, testbed, stats_fname, candidates, limit, samples_dir)

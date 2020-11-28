@@ -5,33 +5,33 @@ from __future__ import division, print_function, unicode_literals
 ###    python versions can be added at any time)
 
 # python executable to drive the data collection, the one in the venv
-main_venv_python = ["D:/dev/py37_cmp/Scripts/python.exe",]
+main_venv_python = ["D:/dev/py37_cmp/Scripts/python.exe", ]
 
 # fully qualified python executable to invoke to run a python at version X.Y
 pyversions_available = {
-    #version: cmdline to invoke python, by example "/bin/python3.7"
+    # version: cmdline to invoke python, by example "/bin/python3.7"
     "3.7": "/usr/bin/python3.7",
     "2.7": "/usr/bin/python2.7",
     }
 
 # package remembercases, projet page at https://gitlab.com/ccanepa/remembercases
-#remembercases_URL = https://gitlab.com/ccanepa/remembercases.git
+# remembercases_URL = https://gitlab.com/ccanepa/remembercases.git
 remembercases_URL = "git@gitlab.com:ccanepa/remembercases.git"
-remembercases_checkout_str = "master" #"v0.4.1" # "branch_name" #"tag_name"
+remembercases_checkout_str = "master"  # "v0.4.1" # "branch_name" #"tag_name"
 
 # package pyglet, project page at https://github.com/pyglet/pyglet
 pyglet_URL = "https://github.com/pyglet/pyglet.git"
 
 # package cocos, project page at https://github.com/los-cocos/cocos
-# cocos_URL  = https://github.com/los-cocos/cocos.git
-cocos_URL  = "git@github.com:los-cocos/cocos.git"
+# cocos_URL = https://github.com/los-cocos/cocos.git
+cocos_URL = "git@github.com:los-cocos/cocos.git"
 
 # git checkout string used before copying cocos\test
 test_checkout_str = "master"
 
 # git checkout string for the commit where cocos\custom_clocks.py be taken,
 # None for 'use original custom_clocks'
-custom_clocks_checkout_str = None #"master"
+custom_clocks_checkout_str = None  # "master"
 
 # packages to install with pip from pypi in each venv to test
 packages = {
@@ -41,7 +41,7 @@ packages = {
     # "numpy": "numpy==1.18.4",
     "six": "six",
     "numpy": "numpy",
-    "PIL": "pillow<8", # '<8' needed for pyglet <1.5.9; py39's pillow wants 8+ in windows
+    "PIL": "pillow<8",  # '<8' needed for pyglet <1.5.9; py39's pillow wants 8+ in windows
     "pytest": "pytest",
     }
 
@@ -56,10 +56,10 @@ packages = {
 # Prepending an '@' to the py version will select the special reference session
 # provided with cocos-testcmp, all other info will be ignored
 
-#pyglet 1.5.10, cocos 0.6.9
+# pyglet 1.5.10, cocos 0.6.9
 v_ref = ("@3.7", "v1.5.9", "release-0.6.9")
 
-#pyglet 1.5.10, cocos 0.6.9
+# pyglet 1.5.10, cocos 0.6.9
 v_other = ("3.7", "v1.5.9", "release-0.6.9")
 
 ### <- Configure this for each comparison run desired
@@ -79,7 +79,7 @@ friendly_pyglet = {
     "0af100f4": "1.4.11 2020 04 18(last(?) 1.4.x, last py2.7 support)",
     "525b7aff": "1.4.3 2019 09 05 (first usable 1.4.x, needs cocos >= 0.6.7)",
     "0419b96c": "1.3.3 2019 11 24 (last released 1.3.x)",
-    "1467968c": "1.3.0 2017 11 10", # py _must_ be < 3.7
+    "1467968c": "1.3.0 2017 11 10",  # py _must_ be < 3.7
     "a9c6ffdb": "last 1.2-maintenance 2016 08 28",
     "2f2283d6": "1.2.4 2015 09 02 (last released 1.2.x)",
     "521c04e1": "1.2alpha1 (sliding) 2014 03 24, used by release cocos 0.6.0",

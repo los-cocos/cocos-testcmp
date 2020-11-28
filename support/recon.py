@@ -1,29 +1,25 @@
 """
 exercise and develop autotest funtionality
+
+To run this script you need the package remembercases, which can be found at
+https://gitlab.com/ccanepa/remembercases
+Instructions about how to install in the same page.
 """
 
 from __future__ import division, print_function, unicode_literals
 
-import sys
-msg = """
-To run this script you need the package remembercases, which can be found at
-https://bitbucket.org/ccanepa/remembercases
-Instructions about how to install in the same page.
-"""
-try:
-    import remembercases
-except ImportError:
-    print(msg)
-    sys.exit(1)
+import os  # noqa: F401
+import pprint  # noqa: F401
+import sys  # noqa: F401
 
-import os
-import pprint
 import helpers as hl
 import remembercases.db as dbm
 import remembercases.doers as doers
 
+
 def fn_fname_test_py(filename):
     return filename.startswith('test_') and filename.endswith('.py')
+
 
 def progress_report(db, verbose=False):
     selectors = [
@@ -144,7 +140,7 @@ def update_3(db, filename_persist, snapshots_dir, snapshots_reference_dir):
         test/test_moveby.py
         test/test_moveto.py
         test/test_repeat2.py
-        test/test_scene_add_scaled.py : agregue z explicito porque color layer no se veia en interactivo
+        test/test_scene_add_scaled.py : explicit z explicit else ColorLayer don't show interactive
         test/test_togglevisibility.py
 
         : third round
@@ -269,7 +265,7 @@ def update_9(db, filename_persist, snapshots_dir, snapshots_reference_dir):
     """
     text = """
         test/test_action_non_interval.py
-        test/test_all_collisions.py : puede no ser representativo; agregado z para ver si cuadrado rinde
+        test/test_all_collisions.py
         test/test_draw_resolution.py
         test/test_interpreter_layer.py : weak test, interpreter not exercised
         test/test_menu_bottom_right.py : todos los de menu no prueban automaticamente la logica
@@ -371,6 +367,7 @@ def update_19(db, filename_persist, snapshots_dir, snapshots_reference_dir):
 
     return checked_in, unknown, move_failed
 
+
 def update_21(db, filename_persist, snapshots_dir, snapshots_reference_dir):
     """
     This files 'pass', register them as such and move their snapshots
@@ -410,40 +407,41 @@ def update_22(db, filename_persist, snapshots_dir, snapshots_reference_dir):
     """
     data = {
       # 'fail'
-      'test/test_pyglet_vb.py' : {
+      'test/test_pyglet_vb.py': {
         'st': 'fail', 'diag': 'incomplete grossini rendition at first frame'},
 
       # 'error'
-      'test/test_text_movement.py' : {
+      'test/test_text_movement.py': {
         'st': 'error',
         'diag': 'position should be set at the node level, not at the element level'},
 
-      'test/test_schedule_interval.py' : {
-          'st':'error', 'diag': 'bad timestamps, repeated snapshots'},
+      'test/test_schedule_interval.py': {
+          'st': 'error', 'diag': 'bad timestamps, repeated snapshots'},
 
-      'test/test_transitions_with_pop_recipe.py' : {
-          'st':'error', 'diag': 'bad timestamps, repeated snapshots'},
+      'test/test_transitions_with_pop_recipe.py': {
+          'st': 'error', 'diag': 'bad timestamps, repeated snapshots'},
 
-      'test/test_SequenceScene.py' : {
-          'st':'error', 'diag': 'bad timestamps, black frame'},
+      'test/test_SequenceScene.py': {
+          'st': 'error', 'diag': 'bad timestamps, black frame'},
 
-      'test/test_camera_orbit.py' : {
-          'st':'error', 'diag': 'alternate snapshots are pure black'},
+      'test/test_camera_orbit.py': {
+          'st': 'error', 'diag': 'alternate snapshots are pure black'},
 
-      'test/test_jumptiles3d.py' : {
-          'st':'error', 'diag': "snpshots don't folow changes in scene"},
+      'test/test_jumptiles3d.py': {
+          'st': 'error', 'diag': "snpshots don't folow changes in scene"},
 
-      'test/test_transition_zoom.py' : {
-          'st':'error', 'diag': 'bad timestamps, repeated snapshots'},
+      'test/test_transition_zoom.py': {
+          'st': 'error', 'diag': 'bad timestamps, repeated snapshots'},
       }
 
-    ren_key = {'st':'testrun_success', 'diag':'testrun_diagnostic'}
+    ren_key = {'st': 'testrun_success', 'diag': 'testrun_diagnostic'}
     testrun_props_by_candidate = {}
     for name in data:
         testrun_props_by_candidate[name] = dict([(ren_key[k], data[name][k]) for k in data[name]])
 
     hl.update_testrun__bad(db, filename_persist, testrun_props_by_candidate,
                            snapshots_dir, snapshots_reference_dir)
+
 
 def update_23(db, filename_persist, snapshots_dir, snapshots_reference_dir):
     """
@@ -463,9 +461,7 @@ def update_23(db, filename_persist, snapshots_dir, snapshots_reference_dir):
     return checked_in, unknown, move_failed
 
 
-
 # <-- one-off tasks
-
 
 # filename to persist the db
 filename_persist = 'initial.dat'
@@ -493,21 +489,21 @@ if clean:
     canonical_names = hl.canonical_names_from_filenames(db, all_test_files)
     hl.add_entities(db, filename_persist, canonical_names)
     candidates, unknowns = hl.get_scripts(db, 'all')
-    assert len(unknowns)==0
+    assert len(unknowns) == 0
     assert candidates == set(canonical_names)
 
     # scan candidates to get info needed by update snapshots
     scripts, unknowns = hl.update_scanprops(db, filename_persist, candidates)
-    assert scripts==candidates
+    assert scripts == candidates
 
     # select snapshot candidates
     candidates, unknowns = hl.get_scripts(db, 'testinfo_valid')
-    assert len(unknowns)==0
+    assert len(unknowns) == 0
 
     # do snapshots
     scripts, unknowns = hl.update_snapshots(db, filename_persist, candidates,
                                             snapshots_dir)
-    assert len(unknowns)==0
+    assert len(unknowns) == 0
 
 ##    # asses these tests pass human inspection; store snapshots for reference
 ##    update_3(db, filename_persist, snapshots_dir, snapshots_reference_dir)

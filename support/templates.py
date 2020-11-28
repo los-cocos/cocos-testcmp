@@ -56,6 +56,7 @@ section_cmp_snp_diff"""
 
 known_symbols = listing_known_symbols.strip().split("\n")
 
+
 def get_template_symbols(text):
     amp_symbols = re.findall(r'@[\w\.-]+', text)
     symbols = [s[1:] for s in amp_symbols]
@@ -73,17 +74,19 @@ def dump_template_symbols(fname):
     with open(outname, "wb") as f:
         f.write(as_bytes)
 
+
 def list_symbols():
     fname = "template_cmp_report.htm"
     dump_template_symbols(fname)
+
 
 ###
 
 # re.finditer(pattern, string, flags=0)
 # Return an iterator yielding MatchObject instances over all
- # non-overlapping matches for the RE pattern in string.
- # The string is scanned left-to-right, and matches are returned in the
-  # order found. Empty matches are included in the result.
+# non-overlapping matches for the RE pattern in string.
+# The string is scanned left-to-right, and matches are returned in the
+# order found. Empty matches are included in the result.
 
 def render_template(text, symbols):
     parts = []
@@ -94,7 +97,7 @@ def render_template(text, symbols):
         parts.append(text[index_after_last_match: startindex])
         index_after_last_match = endindex
         # handle matched symbol
-        symbol = text[startindex + 1 : endindex]
+        symbol = text[startindex + 1: endindex]
         symbol_value = symbols[symbol]
         parts.append(symbol_value)
     # handle chars after last match
@@ -102,7 +105,6 @@ def render_template(text, symbols):
     text_out = "".join(parts)
     return text_out
 
-    as_bytes = text_out.encode("utf8")
 
 def render_template_to_file(in_, out, symbols):
     with open(in_, "r", encoding="utf-8") as f:
@@ -112,11 +114,13 @@ def render_template_to_file(in_, out, symbols):
     with open(out, "wb") as f:
         f.write(as_bytes)
 
+
 def dump_cmp_proofread():
-    syms = { s: s.upper() for s in known_symbols}
+    syms = {s: s.upper() for s in known_symbols}
     in_ = "template_cmp_report.htm"
     out = "cmp_report_proofread.htm"
     render_template_to_file(in_, out, syms)
+
 
 def parses_symbols_renaming(text, separator):
     """ parses rename spec
@@ -132,14 +136,15 @@ def parses_symbols_renaming(text, separator):
     old_to_new = {}
     for line in all_lines:
         s = line.strip()
-        if len(s)==0 or s.startswith("#"):
+        if len(s) == 0 or s.startswith("#"):
             continue
         parts = s.split(separator)
-        if len(parts)==1:
+        if len(parts) == 1:
             parts.append(parts[0])
         parts = [s.strip() for s in parts]
         old_to_new[parts[0]] = parts[1]
     return old_to_new
+
 
 def rename_symbols():
     fname = "renaming_symbols.txt"
@@ -151,6 +156,7 @@ def rename_symbols():
     in_ = "template_cmp_report.htm"
     out = "template_cmp_report_symbols_renamed.htm"
     render_template_to_file(in_, out, amp_symbols)
+
 
 ### section snapshots delta
 def render_delta(snp_by_scripts, reldir_snp_ref, reldir_snp_other):
@@ -176,14 +182,17 @@ def render_delta(snp_by_scripts, reldir_snp_ref, reldir_snp_other):
     text = "\n".join(parts)
     return text
 
+
 def usage():
     script_name = os.path.basename(sys.argv[0])
     print(__doc__ % script_name)
+
 
 def unknown_subcmd():
     print("Unknown subcommand.")
     usage()
     sys.exit(1)
+
 
 subcmd = {
     "--list-symbols": list_symbols,
@@ -196,7 +205,6 @@ subcmd = {
 
 
 if __name__ == "__main__":
-    import sys
     if len(sys.argv) == 1:
         selector = "--help"
     else:

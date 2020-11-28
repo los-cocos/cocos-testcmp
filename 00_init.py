@@ -3,11 +3,15 @@
 This script suposed to run in a venv
 """
 from __future__ import division, print_function, unicode_literals
-import os, shutil, subprocess, sys
+import os
+import shutil
+import subprocess
+import sys
 
 import support.fs as fs
 
 import conf as te
+
 
 def clone_lib(libname, URL, dst):
     cmd_parts = ["git", "clone", URL, dst]
@@ -15,6 +19,7 @@ def clone_lib(libname, URL, dst):
         print("\nError, could not clone lib '%s'. Cmd tried:" % libname)
         print("   ", " ".join(cmd_parts))
         sys.exit(1)
+
 
 def install_remembercases(python_venv_cmdline, path_remembercases, checkout_str):
     print("\nCheckout the desired remembercases version")
@@ -31,7 +36,6 @@ def install_remembercases(python_venv_cmdline, path_remembercases, checkout_str)
         print("\nError, could not install remembercases. Cmd tried:")
         print("   ", " ".join(cmd_parts))
         sys.exit(1)
-
 
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -66,7 +70,8 @@ shutil.copytree(path_services.cocos_test, path_services.test)
 print("\nCloning remembercases")
 clone_lib("remembercases", te.remembercases_URL, path_services.remembercases)
 
-install_remembercases(te.main_venv_python, path_services.remembercases, te.remembercases_checkout_str)
-
+install_remembercases(te.main_venv_python, path_services.remembercases,
+    te.remembercases_checkout_str
+    )
 
 print("*** initialization done ***")

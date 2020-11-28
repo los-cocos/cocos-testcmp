@@ -1,7 +1,8 @@
 from __future__ import division, print_function, unicode_literals
-import six
+import six  # noqa: F401
 
-import os, sys
+import os
+import sys  # noqa: F401
 
 import support.fs as fs
 
@@ -28,8 +29,9 @@ test_tmx.py
 test_RectMapCollider__no_stuck - copia.py
 """
 
-prefix = ( "# DONT set cocos_utest, disregard cocos_utest comments and docstrings,\n" +
-           "# this file hotpatched by cocos-testcmp ignores cocos_utest\n" )
+prefix = ("# DONT set cocos_utest, disregard cocos_utest comments and docstrings,\n" +
+          "# this file hotpatched by cocos-testcmp ignores cocos_utest\n")
+
 
 def patch_assert_cu(path_services):
     print("in patch_assert_cu")
@@ -55,7 +57,7 @@ def patch_assert_cu(path_services):
                 as_bytes = f.write(as_bytes)
 
 
-new_runner1_tail ="""
+new_runner1_tail = """
 def proceed(fname):
     tests = get_list(fname)
     cmd = 'py.test -v ' + ' '.join(tests)
@@ -67,6 +69,7 @@ if len(sys.argv)!=2:
 else:
     proceed(sys.argv[1])
 """
+
 
 def patch_runner1(path_services):
     global new_runner1_tail, prefix
@@ -80,6 +83,7 @@ def patch_runner1(path_services):
     with open(fname, "wb") as f:
         as_bytes = f.write(as_bytes)
 
+
 # patch director "os.environ.get('cocos_utest', False)" -> "hasattr(pyglet, 'mock_level')"
 def patch_director(path_services):
     fname = path_services.cocos_director
@@ -91,18 +95,22 @@ def patch_director(path_services):
     with open(fname, "wb") as f:
         as_bytes = f.write(as_bytes)
 
+
 def patch_all(path_services):
     patch_assert_cu(path_services)
     patch_runner1(path_services)
     patch_director(path_services)
 
+
 def needs_legacy_patch(path_services):
     fname = path_services.pytest_nolegacy
     return not os.path.exists(fname)
 
+
 def patch_if_needed(path_services):
     if needs_legacy_patch(path_services):
         patch_all(path_services)
+
 
 # What its seen currently at end of capture is
 """
@@ -111,6 +119,8 @@ def patch_if_needed(path_services):
 ------------------
 """
 #where the '------------------\n' comes from the runner in do_test
+
+
 def get_summary_line(text):
     """
     text assumed the output captured in do_test func pytest_from_venv
