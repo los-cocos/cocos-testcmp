@@ -134,7 +134,11 @@ def make_venv(path_venv, python_cmdline, asked_py):
 
 
 def get_py_cmd_venv(path_venv):
-    return [os.path.join(path_venv, "Scripts", "python"), ]
+    if sys.platform == "win32":
+        python_cmdline = [os.path.join(path_venv, "Scripts", "python"), ]
+    else:
+        python_cmdline = [os.path.join(path_venv, "bin", "python"), ]
+    return python_cmdline
 
 
 def query_venv_python_version(py_cmd_venv):

@@ -5,7 +5,8 @@ from __future__ import division, print_function, unicode_literals
 ###    python versions can be added at any time)
 
 # python executable to drive the data collection, the one in the venv
-main_venv_python = ["D:/dev/py37_cmp/Scripts/python.exe", ]
+main_venv_python = [r"D:\dev\py37_cmp\Scripts\python.exe"]  # (windows)
+# main_venv_python = ["/home/pi/dev2/py37_cmp/bin/python"]  # (raspbian buster)
 
 # fully qualified python executable to invoke to run a python at version X.Y
 pyversions_available = {
@@ -14,7 +15,7 @@ pyversions_available = {
     "2.7": "/usr/bin/python2.7",
     }
 
-# package remembercases, projet page at https://gitlab.com/ccanepa/remembercases
+# package remembercases, project page at https://gitlab.com/ccanepa/remembercases
 # remembercases_URL = https://gitlab.com/ccanepa/remembercases.git
 remembercases_URL = "git@gitlab.com:ccanepa/remembercases.git"
 remembercases_checkout_str = "master"  # "v0.4.1" # "branch_name" #"tag_name"
@@ -22,7 +23,7 @@ remembercases_checkout_str = "master"  # "v0.4.1" # "branch_name" #"tag_name"
 # package pyglet, project page at https://github.com/pyglet/pyglet
 pyglet_URL = "https://github.com/pyglet/pyglet.git"
 
-# package cocos, project page at https://github.com/los-cocos/cocos
+# package cocos2D, project page at https://github.com/los-cocos/cocos
 # cocos_URL = https://github.com/los-cocos/cocos.git
 cocos_URL = "git@github.com:los-cocos/cocos.git"
 
@@ -40,7 +41,7 @@ packages = {
     # "numpy": "numpy",
     # "numpy": "numpy==1.18.4",
     "six": "six",
-    "numpy": "numpy",
+    "numpy": "numpy",  # "numpy==1.16.2", # the 1.16.2 used in the raspi3
     "PIL": "pillow<8",  # '<8' needed for pyglet <1.5.9; py39's pillow wants 8+ in windows
     "pytest": "pytest",
     }
@@ -68,7 +69,8 @@ v_other = ("3.7", "v1.5.9", "release-0.6.9")
 ### --> Only for reference, not used in cocos-testcmp
 friendly_pyglet = {
     # abrev. hash: friendly name
-    "3536341e": "v1.5.10 2020 11 15 (ATM last 1.5.x released)",
+    "69a09bb8": "v1.5.11 2020 11 18 (ATM last 1.5.x released)",
+    "3536341e": "v1.5.10 2020 11 15",
     "33175228": "1.5.9 2020 11 09",
     "a39ebc20": "1.5.8 2020 10 16",
     "b9c9ffae": "1.5.7 2020 06 21",
