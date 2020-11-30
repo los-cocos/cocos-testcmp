@@ -1,0 +1,19 @@
+
+language: python
+
+python:
+  - 3.6
+  - 3.9
+
+cache:
+  - pip
+  - directories:
+    - $HOME/.pyenv_cache
+
+env:
+
+install:
+
+script:
+- python -m pip install flake8
+- python -m flake8 .
