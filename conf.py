@@ -57,10 +57,10 @@ packages = {
 # Prepending an '@' to the py version will select the special reference session
 # provided with cocos-testcmp, all other info will be ignored
 
-# pyglet 1.5.10, cocos 0.6.9
+# pyglet 1.5.9, cocos 0.6.9
 v_ref = ("@3.7", "v1.5.9", "release-0.6.9")
 
-# pyglet 1.5.10, cocos 0.6.9
+# pyglet 1.5.9, cocos 0.6.9
 v_other = ("3.7", "v1.5.9", "release-0.6.9")
 
 ### <- Configure this for each comparison run desired
@@ -69,7 +69,9 @@ v_other = ("3.7", "v1.5.9", "release-0.6.9")
 ### --> Only for reference, not used in cocos-testcmp
 friendly_pyglet = {
     # abrev. hash: friendly name
-    "69a09bb8": "v1.5.11 2020 11 18 (ATM last 1.5.x released)",
+    "e3c27ab2": "v1.5.13 2020 12 18 (ATM last 1.5.x released)",
+    # no 1.5.12 on pypi
+    "69a09bb8": "v1.5.11 2020 11 18",
     "3536341e": "v1.5.10 2020 11 15",
     "33175228": "1.5.9 2020 11 09",
     "a39ebc20": "1.5.8 2020 10 16",
