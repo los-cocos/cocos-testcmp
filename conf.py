@@ -69,6 +69,9 @@ v_other = ("3.7", "v1.5.9", "release-0.6.9")
 ### --> Only for reference, not used in cocos-testcmp
 friendly_pyglet = {
     # abrev. hash: friendly name
+    "5de9e518": "v1.5.17 2021 05 21",
+    "ba4e722e": "v1.5.16 2021 04 13",  # some text failures due to
+                                       # https://github.com/pyglet/pyglet/issues/378
     "03eeadbb": "v1.5.15 2021 02 09",
     "e3c27ab2": "v1.5.13 2020 12 18",
     # no 1.5.12 on pypi
@@ -96,13 +99,13 @@ friendly_pyglet = {
 friendly_cocos = {
     "90b9350": "0.6.9 2020 11 08",
     'cab0b8a': "0.6.8 2020 02 02",
-    '32af346': "0.6.7 2019 09 06 (1st cocos version to support pyglet 1.4.x, needs 1.4.3+)",
+    '32af346': "0.6.7 2019 09 06 (1st cocos vs to support pyglet 1.4.x, needs 1.4.3+)",
     'd90978d': "0.6.6 2019 08 15",
-    'fe6beb3': "0.6.5 2017 08 24 (1st cocos version to support pyglet 1.3.x, also runs 1.2.x)",
+    'fe6beb3': "0.6.5 2017 08 24 (1st cocos vs to support pyglet 1.3.x, also runs 1.2.x)",
     '6c894fa': "0.6.4 2016 06 12",
     'a44fba5': "0.6.3 2015 04 26 (needs pyglet<=1.2.4 due to #240)",
     'e543b18': "0.6.2 2015 04 08",
-    'c737675': "0.6.0 2014 03 24 (1st cocos version to support py3, needs 3.3+ or 2.6+)",
+    'c737675': "0.6.0 2014 03 24 (1st cocos vs to support py3, needs 3.3+ or 2.6+)",
     'e084685': "0.5.5 2012 08 13",
     '312a7a6': "0.5.0 2011 10 26",
     '20e2bed': "0.4.0 2010 09 27 (needs pyglet 1.1.4+)",
