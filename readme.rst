@@ -62,7 +62,7 @@ By example, from the official repo and with https::
 
     git clone https://github.com/los-cocos/cocos-testcmp.git
 
-Now cocos-testcmp/ will hold the Working Copy (WD) of the repo, and it will be in the default branch, 'main' because that is the new style, not 'master'.
+Now cocos-testcmp/ will hold the Working Directory (WD) of the repo, and it will be in the default branch, 'main' because that is the new style, not 'master'.
 If you are developing cocos-testcmp, switch to the desired branch, else let it alone.
 
 Initial configuration

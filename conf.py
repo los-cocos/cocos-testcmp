@@ -5,7 +5,7 @@ from __future__ import division, print_function, unicode_literals
 ###    python versions can be added at any time)
 
 # python executable to drive the data collection, the one in the venv
-main_venv_python = [r"D:\dev\py37_cmp\Scripts\python.exe"]  # (windows)
+main_venv_python = [r"D:\venvs\py38_cmp\Scripts\python.exe"]  # (windows)
 # main_venv_python = ["/home/pi/dev2/py37_cmp/bin/python"]  # (raspbian buster)
 
 # fully qualified python executable to invoke to run a python at version X.Y
