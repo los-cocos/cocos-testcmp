@@ -42,7 +42,7 @@ packages = {
     # "numpy": "numpy==1.18.4",
     "six": "six",
     "numpy": "numpy",  # "numpy==1.16.2", # the 1.16.2 used in the raspi3
-    "PIL": "pillow<8",  # '<8' needed for pyglet <1.5.9; py39's pillow wants 8+ in windows,
+    "PIL": "pillow",  # '<8' needed for pyglet <1.5.9; py39's pillow wants 8+ in windows,
                         # py36 needs pillow<9, py37 needs pillow<10 
     "pytest": "pytest",
     }
