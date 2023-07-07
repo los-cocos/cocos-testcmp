@@ -42,7 +42,8 @@ packages = {
     # "numpy": "numpy==1.18.4",
     "six": "six",
     "numpy": "numpy",  # "numpy==1.16.2", # the 1.16.2 used in the raspi3
-    "PIL": "pillow<8",  # '<8' needed for pyglet <1.5.9; py39's pillow wants 8+ in windows
+    "PIL": "pillow<8",  # '<8' needed for pyglet <1.5.9; py39's pillow wants 8+ in windows,
+                        # py36 needs pillow<9, py37 needs pillow<10 
     "pytest": "pytest",
     }
 
@@ -60,8 +61,8 @@ packages = {
 # pyglet 1.5.9, cocos 0.6.9
 v_ref = ("@3.7", "v1.5.9", "release-0.6.9")
 
-# pyglet 1.5.9, cocos 0.6.9
-v_other = ("3.7", "v1.5.9", "release-0.6.9")
+# pyglet 1.5.27, cocos 0.6.9 transitioning to 0.6.10
+v_other = ("3.8", "v1.5.27", "888fcc7")
 
 ### <- Configure this for each comparison run desired
 
@@ -69,6 +70,7 @@ v_other = ("3.7", "v1.5.9", "release-0.6.9")
 ### --> Only for reference, not used in cocos-testcmp
 friendly_pyglet = {
     # abrev. hash: friendly name
+    "b9c8c10e" : "v1.5.27 2022 09 21",
     "5de9e518": "v1.5.17 2021 05 21",
     "ba4e722e": "v1.5.16 2021 04 13",  # some text failures due to
                                        # https://github.com/pyglet/pyglet/issues/378
@@ -82,7 +84,7 @@ friendly_pyglet = {
     "b9c9ffae": "1.5.7 2020 06 21",
     "ce8b3073": "1.5.6 2020 06 12",
     "4f2e2d6c": "1.5.5 2020 05 02",
-    "1ffd9402": "1.5.3 2020 04 06 breaks cocos-testcmp + cocos 0.6.8, custom_clocls problem",
+    "1ffd9402": "1.5.3 2020 04 06 breaks cocos-testcmp + cocos 0.6.8, custom_clocks problem",
     "edf43ad5": "1.5.2 2020 03 23",
     "0af100f4": "1.4.11 2020 04 18(last(?) 1.4.x, last py2.7 support)",
     "525b7aff": "1.4.3 2019 09 05 (first usable 1.4.x, needs cocos >= 0.6.7)",
@@ -97,6 +99,7 @@ friendly_pyglet = {
     }
 
 friendly_cocos = {
+    "888fcc7": "0.6.9 2023 07 06", # begin work for release 3.6.10
     "90b9350": "0.6.9 2020 11 08",
     'cab0b8a': "0.6.8 2020 02 02",
     '32af346': "0.6.7 2019 09 06 (1st cocos vs to support pyglet 1.4.x, needs 1.4.3+)",
