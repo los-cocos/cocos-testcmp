@@ -9,7 +9,10 @@ __date__ = "2020 11 18"
 
 from setuptools import setup
 
-f = open('readme.rst', 'rU')
+try:
+    f = open('readme.rst', 'rU')
+except:
+    f = open('readme.rst', 'r')
 long_description = f.read()
 f.close()
 

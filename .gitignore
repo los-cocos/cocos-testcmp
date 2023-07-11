@@ -22,3 +22,4 @@ docgen/_build
 
 # cocos test workspace
 work/
+cache.txt
