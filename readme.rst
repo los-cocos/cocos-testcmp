@@ -73,7 +73,7 @@ Edit conf.py
 
 	- In  linux also pyversions_available should be configured
 
-Initialize work/ subtree, install cocos-testcmp in the main python venv. If wrong configuration in conf.py probably	will traceback here. Sometimes is possible to delete work/ and rerun 00_init.py::
+Initialize work/ subtree, install cocos-testcmp in the main python venv::
 
 	(py38_cmp) D:\dev\cocos-testcmp>python 00_init.py
 	(py38_cmp) D:\dev\cocos-testcmp>python -m pip install -e .
