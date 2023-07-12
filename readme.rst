@@ -7,7 +7,9 @@ Testing in cocos is accomplished by
 
 - taking automated snapshots along the execution of the cocos2d/test/ demo scripts and doing an human assisted comparison with a reference snapshot session 
 
-This package helps with that by building a comparison report for the two targeted versions specified in the configuration, version meaning a tuple of (python version, pyglet version, cocos version), where the pyglet and cocos version are specific git commits. 
+- This package helps with that by building a comparison report for the two targeted versions specified in the configuration, version meaning a tuple of (python version, pyglet version, cocos version), where the pyglet and cocos version are specific git commits. 
+
+- There's one special snapshot session included in this repo clone that can be used as a base reference, the one referenced by ("@3.7", "v1.5.9", "release-0.6.9") 
 
 The report is a html page that tells 
 
@@ -31,18 +33,64 @@ If one of the version selected is the reference version, and
 then the other version is considered good.
 
 To consider a cocos version good to release, individual runs with py lower, py last, pyglet lower, pyglet high must be all good. 
- 
+
+
+So, how is the workflow ?
+-------------------------
+
+- prepare the stage to run comparisons
+- loop
+	- edit conf.py to set the v_other to compare
+	- run do_test.py , which takes snapshots an does comparison report
+    - review the report
+    - fix problems if any 	
+
+Sugestion: if fixing cocos, do your coding in a separate clone, commit, go to the clone under work/, checkout master, do a pull, edit conf.py for the new cocos checkout to use.
+
+Preparation
+-----------
+
+Here are the commands and editions to do, copy it and
+	- translate to yout OS / your machine paths, translate URLs as needed
+	- use as a checklist to mark what has been done, it is easy to get confused
+	- See below the list for more details about each operation.
+	- When the list us completed, go to the section "Test loop" for details in running comparisons
+
+
+Setting the main python venv, clone cocos-testcmp, move to the clone's working dir::
+
+	D:\dev>py -3.8 -m venv d:\venvs\py38_cmp
+	D:\dev>d:\venvs\py38_cmp\Scripts\activate
+	(py38_cmp) D:\dev>python -m pip install pip -U
+	(py38_cmp) D:\dev>git clone git@github.com:los-cocos/cocos-testcmp.git
+	(py38_cmp) D:\dev>cd cocos-testcmp
+	
+Edit conf.py
+
+	- main_venv_python = [r"d:\venvs\py38_cmp\Scripts\python.exe"]
+		
+	- If you are not ccanepa, or are working from a fork, you may need to adjust the URLs for cocos, cocos-testcmp and remembercases
+
+	- In  linux also pyversions_available should be configured
+
+Initialize work\ subtree, install cocos-testcmp in the main python venv. If wrong configuration in conf.py probably	will traceback here. Sometimes is possible to delete work\ and rerun 00_init.py::
+
+    (py38_cmp) D:\dev\cocos-testcmp>python 00_init.py
+	(py38_cmp) D:\dev\cocos-testcmp>python -m pip install -e .
+
+
+
 Setting the venv
 ----------------
 
-- make a venv, I will call it py37_cmp::
+- make a venv, I will call it py38_cmp::
 
-    D:\dev>py -3.7 -m venv py37_cmp     (windows + cmd.exe shell)
+    D:\dev>py -3.8 -m venv py38_cmp     (windows + cmd.exe shell)
     python3 -m venv py37_cmp            (raspbian buster + bash)
 
 - activate the pyenv, now the command 'python' would refer to the python in the venv, only applies to the activated console::
 
-    D:\dev>py37_cmp\Scripts\activate    (windows + cmd.exe shell)
+    D:\dev>py38_cmp\Scripts\activate    (windows + cmd.exe shell)
     source py37_cmp/bin/activate        (raspbian buster + bash)
 
   From now, all commands are issued at the activated console
@@ -65,6 +113,8 @@ By example, from the official repo and with https::
 Now cocos-testcmp/ will hold the Working Directory (WD) of the repo, and it will be in the default branch, 'main' because that is the new style, not 'master'.
 If you are developing cocos-testcmp, switch to the desired branch, else let it alone.
 
+Just to not forget, do a cd to move to the Working Directory.
+
 Initial configuration
 --------------------- 
 
@@ -78,7 +128,7 @@ The file cocos-testcmp/conf.py is the one to edit.
 
   In my case, I would set::
   
-    main_venv_python = [r"D:\dev\py37_cmp\Scripts\python.exe"]  #   (windows)
+    main_venv_python = [r"D:\dev\py38_cmp\Scripts\python.exe"]  #   (windows)
     main_venv_python = ["/home/pi/dev2/py37_cmp/bin/python"]   #   (raspbian buster)
 
 - Setting up the different pythons to use to exercise cocos
@@ -134,10 +184,9 @@ The file cocos-testcmp/conf.py is the one to edit.
   
 - Now in the activated console do::
 
-    cd cocos-testcmp
     python 00_init.py
 
-  This creates the work/ subtree, makes there clones of 'remembercases', 'cocos2d', 'pyglet', sets the tests to be exercised.
+  This creates the work/ subtree, makes there clones of 'remembercases', 'cocos2d', 'pyglet', sets the tests to be exercised, sets-up the reference snapshots.
      
 - Install cocos-testcmp in the venv so some imports work.
   Still in cocos-testcmp directory::

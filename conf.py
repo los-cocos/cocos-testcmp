@@ -5,7 +5,7 @@ from __future__ import division, print_function, unicode_literals
 ###    python versions can be added at any time)
 
 # python executable to drive the data collection, the one in the venv
-main_venv_python = [r"d:\venvs\py38_cmp\Scripts\python.exe"]  # (windows)
+main_venv_python = [r"d:\venvs\py38_cmp1\Scripts\python.exe"]  # (windows)
 # main_venv_python = ["/home/pi/dev2/py37_cmp/bin/python"]  # (raspbian buster)
 
 # fully qualified python executable to invoke to run a python at version X.Y
@@ -61,8 +61,10 @@ packages = {
 # pyglet 1.5.9, cocos 0.6.9
 v_ref = ("@3.7", "v1.5.9", "release-0.6.9")
 
-# pyglet 1.5.27, cocos 0.6.9 transitioning to 0.6.10
-v_other = ("3.8", "v1.5.27", "888fcc7")
+# (later) pyglet 1.5.27, cocos 0.6.9 transitioning to 0.6.10
+
+# starting with cocos master and known good py and pyglet  
+v_other = ("3.8", "v1.5.9", "888fcc7")
 
 ### <- Configure this for each comparison run desired
 
