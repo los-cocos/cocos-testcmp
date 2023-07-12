@@ -40,10 +40,10 @@ So, how is the workflow ?
 
 - prepare the stage to run comparisons
 - loop
-	- edit conf.py to set the v_other to compare
-	- run do_test.py , which takes snapshots an does comparison report
-    - review the report
-    - fix problems if any 	
+	+ edit conf.py to set the v_other to compare
+	+ run do_test.py , which takes snapshots an does comparison report
+    + review the report
+    + fix problems if any 	
 
 Sugestion: if fixing cocos, do your coding in a separate clone, commit, go to the clone under work/, checkout master, do a pull, edit conf.py for the new cocos checkout to use.
 
@@ -54,7 +54,7 @@ Here are the commands and editions to do, copy it and
 	- translate to yout OS / your machine paths, translate URLs as needed
 	- use as a checklist to mark what has been done, it is easy to get confused
 	- See below the list for more details about each operation.
-	- When the list us completed, go to the section "Test loop" for details in running comparisons
+	- When the list is completed, go to the section "Test loop" for details in running comparisons
 
 
 Setting the main python venv, clone cocos-testcmp, move to the clone's working dir::
@@ -67,17 +67,16 @@ Setting the main python venv, clone cocos-testcmp, move to the clone's working d
 	
 Edit conf.py
 
-	- main_venv_python = [r"d:\venvs\py38_cmp\Scripts\python.exe"]
+	- ``main_venv_python = [r"d:\venvs\py38_cmp\Scripts\python.exe"]``
 		
 	- If you are not ccanepa, or are working from a fork, you may need to adjust the URLs for cocos, cocos-testcmp and remembercases
 
 	- In  linux also pyversions_available should be configured
 
-Initialize work\ subtree, install cocos-testcmp in the main python venv. If wrong configuration in conf.py probably	will traceback here. Sometimes is possible to delete work\ and rerun 00_init.py::
+Initialize work/ subtree, install cocos-testcmp in the main python venv. If wrong configuration in conf.py probably	will traceback here. Sometimes is possible to delete work/ and rerun 00_init.py::
 
     (py38_cmp) D:\dev\cocos-testcmp>python 00_init.py
 	(py38_cmp) D:\dev\cocos-testcmp>python -m pip install -e .
-
 
 
 Setting the venv
