@@ -42,8 +42,8 @@ So, how is the workflow ?
 - loop
 	+ edit conf.py to set the v_other to compare
 	+ run do_test.py , which takes snapshots an does comparison report
-    + review the report
-    + fix problems if any 	
+	+ review the report
+	+ fix problems if any	
 
 Sugestion: if fixing cocos, do your coding in a separate clone, commit, go to the clone under work/, checkout master, do a pull, edit conf.py for the new cocos checkout to use.
 
@@ -51,10 +51,10 @@ Preparation
 -----------
 
 Here are the commands and editions to do, copy it and
-	- translate to yout OS / your machine paths, translate URLs as needed
+	- translate to your OS / your machine paths, translate URLs as needed
 	- use as a checklist to mark what has been done, it is easy to get confused
 	- See below the list for more details about each operation.
-	- When the list is completed, go to the section "Test loop" for details in running comparisons
+	- When the list is completed, go to the section "Test loop" for details on running comparisons
 
 
 Setting the main python venv, clone cocos-testcmp, move to the clone's working dir::
@@ -75,39 +75,42 @@ Edit conf.py
 
 Initialize work/ subtree, install cocos-testcmp in the main python venv. If wrong configuration in conf.py probably	will traceback here. Sometimes is possible to delete work/ and rerun 00_init.py::
 
-    (py38_cmp) D:\dev\cocos-testcmp>python 00_init.py
+	(py38_cmp) D:\dev\cocos-testcmp>python 00_init.py
 	(py38_cmp) D:\dev\cocos-testcmp>python -m pip install -e .
 
+This concludes the preparation list; see below sections for details. 
+
+ When the list is completed, go to the section "Test loop" for details on running comparisons
 
 Setting the venv
 ----------------
 
 - make a venv, I will call it py38_cmp::
 
-    D:\dev>py -3.8 -m venv py38_cmp     (windows + cmd.exe shell)
-    python3 -m venv py37_cmp            (raspbian buster + bash)
+	D:\dev>py -3.8 -m venv py38_cmp		(windows + cmd.exe shell)
+	python3 -m venv py37_cmp			(raspbian buster + bash)
 
 - activate the pyenv, now the command 'python' would refer to the python in the venv, only applies to the activated console::
 
-    D:\dev>py38_cmp\Scripts\activate    (windows + cmd.exe shell)
-    source py37_cmp/bin/activate        (raspbian buster + bash)
+	D:\dev>py38_cmp\Scripts\activate	(windows + cmd.exe shell)
+	source py37_cmp/bin/activate		(raspbian buster + bash)
 
   From now, all commands are issued at the activated console
 
 - upgrade pip to not see pip warning messages::
 
-    python -m pip install pip --upgrade
+	python -m pip install pip --upgrade
 
 Cloning cocos-testcmp
 ---------------------
 
 Clone cocos-testcmp, the repo_url depends if you are getting it from the official repo or a forked repo, and the git protocol to use (https or git over SSH)::
 
-    git clone repo_url
-        
+	git clone repo_url
+		
 By example, from the official repo and with https::
 
-    git clone https://github.com/los-cocos/cocos-testcmp.git
+	git clone https://github.com/los-cocos/cocos-testcmp.git
 
 Now cocos-testcmp/ will hold the Working Directory (WD) of the repo, and it will be in the default branch, 'main' because that is the new style, not 'master'.
 If you are developing cocos-testcmp, switch to the desired branch, else let it alone.
@@ -123,12 +126,12 @@ The file cocos-testcmp/conf.py is the one to edit.
 
 - Set 'main_venv_python' to a list with only one item, the fully qualified python executable to drive the data collection. You get it by running in the activated console::
 
-    python -c "import sys; print(sys.executable)"
+	python -c "import sys; print(sys.executable)"
 
   In my case, I would set::
   
-    main_venv_python = [r"D:\dev\py38_cmp\Scripts\python.exe"]  #   (windows)
-    main_venv_python = ["/home/pi/dev2/py37_cmp/bin/python"]   #   (raspbian buster)
+	main_venv_python = [r"D:\dev\py38_cmp\Scripts\python.exe"]	#	(windows)
+	main_venv_python = ["/home/pi/dev2/py37_cmp/bin/python"]   #   (raspbian buster)
 
 - Setting up the different pythons to use to exercise cocos
 
@@ -140,30 +143,30 @@ The file cocos-testcmp/conf.py is the one to edit.
    
   if you invoke a python version X.Y interpreter with 'foo' run::
   
-      foo -c "import sys; print(sys.executable)"
+	  foo -c "import sys; print(sys.executable)"
 
   in another console, **not the activated console**, to get the fully qualified python executable to use.
   Common values for 'foo' are 'python', 'python2', python3'
   
   By example, in raspbian buster::
 
-        pi@raspberrypi:~ $ python -V
-        Python 2.7.16
-        pi@raspberrypi:~ $ python -c "import sys; print(sys.executable)"
-        /usr/bin/python
+		pi@raspberrypi:~ $ python -V
+		Python 2.7.16
+		pi@raspberrypi:~ $ python -c "import sys; print(sys.executable)"
+		/usr/bin/python
 
-        pi@raspberrypi:~ $ python3 -V
-        Python 3.7.3
-        pi@raspberrypi:~ $ python3 -c "import sys; print(sys.executable)"
-        /usr/bin/python3
+		pi@raspberrypi:~ $ python3 -V
+		Python 3.7.3
+		pi@raspberrypi:~ $ python3 -c "import sys; print(sys.executable)"
+		/usr/bin/python3
 
   So in conf.py::
 
-      pyversions_available = {
-        # version: cmdline to invoke python, by example "/bin/python3.7"
-        "3.7": "/usr/bin/python3.7",
-        "2.7": "/usr/bin/python2.7",
-    }
+	  pyversions_available = {
+		# version: cmdline to invoke python, by example "/bin/python3.7"
+		"3.7": "/usr/bin/python3.7",
+		"2.7": "/usr/bin/python2.7",
+	}
 
   The tests will be run in venvs created from those pythons
    
@@ -183,21 +186,21 @@ The file cocos-testcmp/conf.py is the one to edit.
   
 - Now in the activated console do::
 
-    python 00_init.py
+	python 00_init.py
 
   This creates the work/ subtree, makes there clones of 'remembercases', 'cocos2d', 'pyglet', sets the tests to be exercised, sets-up the reference snapshots.
-     
+	 
 - Install cocos-testcmp in the venv so some imports work.
   Still in cocos-testcmp directory::
   
-     python -m pip install -e .
-     
+	 python -m pip install -e .
+	 
 That ends the preparation phase.
 
 Note: in linux you may want to test if numpy and pillow can be imported in the venv with::
 
-    python -c "import numpy"
-    python -c "import PIL"
+	python -c "import numpy"
+	python -c "import PIL"
 
 and if not resolve the problem before continue.
 
@@ -218,7 +221,7 @@ Test loop
 
 - Run comparison with::
 
-     python do_test.py
+	 python do_test.py
 
   Note that at least in Windows the activated console should have focus when do_test begins to take snapshots, else will produce snapshots of 0 filesize and the comparison will crash with a traceback.
   
