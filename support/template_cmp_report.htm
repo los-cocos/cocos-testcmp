@@ -65,7 +65,7 @@ v_other_asked: @cmp.v_other.cached<br>
   <tr><td>total tests</td><td>@cmp.v_ref.stats_total_tests</td><td>@cmp.v_other.stats_total_tests</td></tr>
   <tr><td>tests without testinfo</td><td>@cmp.v_ref.stats_no_testinfo</td><td>@cmp.v_other.stats_no_testinfo</td></tr>
   <tr><td>repeteables</td><td>@cmp.v_ref.stats_repeteables</td><td>@cmp.v_other.stats_repeteables</td></tr>
-  <tr><td>tracebacks</td><td>@cmp.v_ref.stats_failures</td><td>@cmp.v_other.stats_failures</td></tr>
+  <tr><td>not all snapshots(*)</td><td>@cmp.v_ref.stats_failures</td><td>@cmp.v_other.stats_failures</td></tr>
   <tr><td>black snapshoots</td><td>@cmp.v_ref.stats_blacks</td><td>@cmp.v_other.stats_blacks</td></tr>
   <tr>
     <td>details take snapshots</td>
@@ -78,6 +78,10 @@ v_other_asked: @cmp.v_other.cached<br>
     <td><a href="@cmp.v_other.pytest_link">link</a></td>
   </tr>
 </table>
+<p>(*) Tests that could not take all the expected snapshots. Could be a traceback terminated the test, timeout was reached, a crash that kills the process that python was unable to capture and report as traceback.</p>
+<p> For win 11 and an AMD APU with drivers version 22.20.02-220623a and openGL driver version 22.06.Beta Release, tests would sometimes die without tracebacks nor error messages, not even showing the cocos window, even when running interactive. This defect not manifested with drivers from whql-amd-software-adrenalin-edition-23.7.1-win10-win11-july6.exe</p>
+
+<p> If there was something reported through stderr it will show in the link after 'details take snapshots'</p>
 
 <p><b>v_ref pytest summary:</b> @cmp.v_ref.pytest_summary</p>
 <p><b>v_other pytest summary:</b> @cmp.v_other.pytest_summary</p>
