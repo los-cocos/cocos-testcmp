@@ -1,7 +1,7 @@
 """
-Tells if alpha(pixel) == const over al imahe pixels
+Tells if alpha(pixel) == const over all image pixels
 
-Sintax:
+Syntax:
     img.py filename
 """
 import sys
@@ -16,9 +16,8 @@ def img_info(img_path):
         # has a constant alpha value?
         im_a = im.getchannel('A')
         data = np.asarray(im_a)
-        a0 = data[0][0] 
-        uf = np.vectorize(lambda a: a==a0)
-        is_const = np.all(uf(data)) 
+        a0 = data[0][0]
+        is_const = np.all(data == a0)
         if is_const:
             print("image has constant alpha value ==", a0)
         else:
