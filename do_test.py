@@ -470,12 +470,13 @@ class SnapshotSession(object):
 		if diagnostic != "":
 			return diagnostic
 		self.resolved_py = resolved_py
+		msg = ""
 
 		try:
 			gits.checkout(path_services.pyglet, self.asked_pyglet)
 			self.resolved_pyglet = gits.WD_short_hash(path_services.pyglet)
 		except cm.CmdExecutionError:
-			msg = ("Could not checkout pyglet at version: %s" +
+			msg += ("Could not checkout pyglet at version: %s" +
 				   "(path to pyglet WD was '%s')\n")
 			diagnostic += msg % (self.asked_pyglet, path_services.pyglet)
 
@@ -484,7 +485,7 @@ class SnapshotSession(object):
 			self.resolved_cocos = gits.WD_short_hash(path_services.cocos)
 		except cm.CmdExecutionError:
 			msg += ("Could not checkout cocos at version: %s" +
-					"(path to cocos WD was '%s')\n")
+					"(path to cocos WD was '%s', maybe you need to git pull?)\n")
 			diagnostic += msg % (self.asked_cocos, path_services.cocos)
 		if diagnostic == "":
 			mark = "@" if self.asked_py.startswith("@") else ""
